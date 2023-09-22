@@ -1,0 +1,62 @@
+\section{Problem solving by search}
+Problem formulation: Several real-world problems can be formulated as search problems. In a search problem, the solution can
+be found by exploring different alternatives.
+
+Problem-solving agents are examples of goal-based agents
+\begin{itemize}
+    \item Problem formulation
+    \item Searching the solution
+    \item Execute the solution
+\end{itemize}
+
+You have to start from a feasible situation, for example in the 8 problem not all configurations are solvable. 
+
+\begin{center}
+    \includegraphics[scale=0.2]{"../images/4/SolvingProblems.png"}    
+\end{center}
+
+\subsection{Eight puzzle}
+\begin{center}
+    \includegraphics[scale=0.2]{"../images/4/8puzzle.png"}    
+\end{center}
+
+\subsubsection{The states}
+We define a state as a feasible configuration of the 8 tiles on the 3x3 grid.
+The search for a solution is represented by a sequence of states in the state space.
+
+\subsubsection{The action() function}
+For the 8-puzzle we can define a function actions(s). The function actions(s) returns, given a state s, the actions that are applicable in that state. An action is represented by the movement of the blank position.
+In this case, actions(s) returns \{up, down, left\}
+
+\begin{center}
+    \includegraphics[scale=0.2]{"../images/4/ActionFunction.png"}    
+\end{center}
+
+\subsubsection{The result() function}
+For the 8-puzzle, we can define a function result(s,a)
+that given a state s and an action a applicable in s,
+returns the state s’ reached by executing a in s. 
+State s' is a successor of s.
+
+\subsection{Search problems}
+A set of states S and an initial state $s_0$. The function actions(s) that given a state s,
+returns the set of feasible actions. The function result(s,a) that given a state s and
+an action a returns the state reached. A goal test that given a state s return true
+if the state is a goal state. A step cost c(s,a,s’) of an action a from s to s’.
+
+
+\subsubsection{The state space}
+The space state is a directed graph with nodes representing states, arcs representing actions. There is an arc from s to s’ if and only if s’ is a successor of s
+\begin{center}
+    \includegraphics[scale=0.2]{"../images/4/StateSpace.png"}    
+\end{center}
+
+The solution to a search problem is a path
+in the state space from the initial state
+to a state that satisfies the goal test
+
+
+Difference between the search tree and the state space. The state space is not saved anywhere, the search tree instead is saved and even represent a trace of state which correspond to the solution of the problem. 
+
+Question at the end of the lecture on why don't we always use the graph search rather than the tree search. The answer is that we have the closed list to mantain and if we use it with graph it becomes too big during the match duration. While the tree is very less expensive and it is more feasible.
+ 
