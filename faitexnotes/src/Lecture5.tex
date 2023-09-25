@@ -1,0 +1,232 @@
+\section{Learning Agents}
+So far we have described the following agents:
+\begin{itemize}
+    \item simple reflex agents
+    \item model-based reflex agents
+    \item goal-based agents
+    \item utility-based agents
+\end{itemize}
+Check the lecture 3 for more details.All these agents seen so far can improve their performance with learning. Every component of the agent’s decisional process can be modified in order to perform better.
+
+Learning allows the agent to operate in initially unknown
+environments and to become more competent than its
+initial knowledge alone might allow. “What kind of performance element will my agent use to do this once it has learned how?”
+
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/LearningAgents.png}
+\end{center}
+Components:
+\begin{itemize}
+    \item Learning Element: it is responsible for making improvements.
+    \item Performance Element: it selects external actions.
+    \item Critic: it provides feedback on the agent is doing and determines how the performance element should be modified to improve future performance
+    \item Problem Generator: it suggests exploratory actions that will lead to new and informative experiences
+\end{itemize}
+The performance element analyses the sensor
+inputs and decide what action to perform.
+Thus it is what we have previously
+considered to be the entire agent.
+
+\subsection{Machine learning}
+“A computer program is said to learn from experience E with respect to some
+class of tasks T and performance measure P, improves with experience E” Mitchell (1997)
+It is an area of Artificial Intelligence focused on building algorithms capable of learning, extracting knowledge from experience. Machine Learning algorithms extract knowledge, they cannot create it. The goal is to build programs that can make informed decisions on new unseen data.
+
+Example of application of machine learning to extract rules for a simple reflex agent:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/ApplicationOfML.png}
+\end{center}
+Differences between programming and machine learning:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/ProgrammingVsMachineLearning.png}
+\end{center}
+Suppose we have the experience we collected encoded as a dataset
+$D = x_1, \dots, x_N$:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/MLTaxonomy.png}
+\end{center}
+
+\subsubsection{Reinforcement learning}
+In sequential decision making:
+\begin{itemize}
+    \item we take a sequence of decisions (or actions) to reach the goal
+    \item the optimal actions are context-dependent
+    \item we generally do not have examples of correct actions
+    \item actions may have long-term consequences
+    \item short-term consequences of optimal actions might seem negative
+\end{itemize}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/5/AgentEnvironment.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/5/AgentEnvironmentPlus1.png}
+    \end{center}
+\end{multicols}
+At time $t$, the agent perceives the environment to be in state $s_t$ and decides to perform action $a_t$. As a result, in the next time step $t+1$ the environment state changes to $s_{t+1}$ and the agent receives a reward $r_{t+1}$.
+This is the generic agent-environment interaction in reinforcement learning:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/AgentEnvironmentInteraction.png}
+\end{center}
+The agent’s goal is to maximize
+the total amount of reward received
+How much future reward will it get when it performs $a_t$
+in $s_t$ and then continues to do its best from there on?
+What is the expected payoff from $s_t$ and $a_t$?
+The agent needs to compute an \textbf{action-value function}
+mapping state-action pairs to expected payoffs:
+\[
+    Q(a_s, s_t) \rightarrow \text{payoff}    
+\]
+or a \textbf{state-value functions} mapping to expected payoffs
+\[
+    V(s_t) \rightarrow \text{payoff}    
+\]
+Reinforcement learning assumes
+that $Q(s_t,a_t)$ is represented as a table
+But the real world is complex,
+the number of possible inputs can be huge!
+We cannot afford to compute an exact $Q(s_t,a_t)$
+(more about this later).
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/CarMountain.png}
+\end{center}
+
+\textbf{Action selection}\\
+At each time step, the agent must decide what action to take in step t based on its current evaluation of the expected payoff in st using a policy function. At any given point in time, a policy $\pi(s_t)$ select what actions the agent should perform. The policy defines the behavior of an agent based on its payoff evaluation. The policy can be deterministic or stochastic.
+
+\begin{itemize}
+    \item Deterministic policy
+    \begin{itemize}
+        \item In the simplest case the policy can be modeled as a function $\pi: \mathcal{S} \to \mathcal{A}$. 
+        \item For example, the policy might simply select the action with the largest expected payoff
+        \item This type of policy can be conveniently represented using a table
+    \end{itemize}
+    \item Stochastic policy
+    \begin{itemize}
+        \item It maps each state to a probability distribution over the actions $\pi: \mathcal{S},\mathcal{A} \to \mathcal{R}$
+        \item $\pi(s,a)$ returns the probability of selecting $a$ in $s$
+        \item Since $\pi(s,a)$ is a probability distribution, it always return value greater or equal to zero and the sum over all the actions is 1
+        \item A stochastic policy can be used to represent also a deterministic policy
+    \end{itemize}
+\end{itemize}
+To obtain a lot of reward, the agent must prefer actions that it has tried in the past and found to lead to high payoff. However, to discover such actions, it has to try actions that it has not selected before. The agent needs to find a trade-off between the exploration of new actions and the
+exploitation promising actions. This is called exploration-exploitation dilemma.
+
+\begin{itemize}
+    \item Greedy Policy: for each state, it deterministically selects an action with maximal value
+    \item $\epsilon$-Greedy Policy: with probability $\epsilon$ it performs a random action, with probability $1 - \epsilon$ it performs the action promising the highest payoff
+\end{itemize}
+
+\textbf{The environment}\\
+The environment must satisfy the Markov property. The next state $s_{t+1}$ and reward $r_{t+1}$ depend only on the current state $s_t$ and action $a_t$. The environment can thus be modeled as a \textbf{Markov Decision Process (MDP)} that has a one-step dynamic described by the probability distribution $p(s_{t+1}, r_{t+1} | s_t, a_t)$.
+\begin{itemize}
+    \item $p: \mathcal{S}\times\mathcal{R}\times\mathcal{S}\times\mathcal{A} \to [0,1]$
+    \item $\sum\limits_{s \in \mathcal{S}} \sum\limits_{r \in \mathcal{R}} p(s', r | s, a) = 1 \hspace{0.5cm} \forall s \in \mathcal{A}, \forall a \in \mathcal{A}(s)$
+\end{itemize}
+
+\textbf{Expected payoff}\\
+In reinforcement learning, the agent has to maximize the reward it receives in the long run
+\[
+    G_t \doteq r_{t+1} + r_{t+2} + r_{t+3} + \dots r_{t+k} + \dots \overset{?}{=} \infty 
+\]
+To provide an upper bound to the payoff, we introduce a discount the future rewards by a factor $\gamma \in (0,1)$:
+\[
+    G_t \doteq r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \dots \gamma^{k-1} r_{t+k} + \dots < \infty 
+\]
+Thus, the expected reward to maximize will be defined as:
+\[
+  \mathbb{E}[G_t] = \mathbb{E}\left[\sum_{k=0}^{\infty} \gamma^k R_{t+k+1}\right] \leq R_{max}\dfrac{1}{1-\gamma}
+\]
+The reward hypothesys\\
+“That all of what we mean by goals and purposes can be well thought
+of as maximization of the expected value of the cumulative sum of
+a received scalar signal (reward).” (Rich Sutton)
+
+In reinforcement learning, the agent learns how to maximize the expected future payoff. We must design a reward function that adequately represents our learning goal.
+Examples
+\begin{itemize}
+    \item Goal-reward representation returns 1 when the goal is reached, 0 otherwise
+    \item Action-penalty representation returns -1 when the state is not the goal, 0 once the goal is reached
+\end{itemize}
+Challenges to reward hypothesis: how to represent risk-sensitive behavior?How to capture diversity in behavior?
+
+\textbf{The value function}
+The action-value function $Q(s_t, a_t)$ estimates the expected
+future payoff when performing action at in state $s_t$
+The state-value function $V(s_t)$ estimates the expected future
+payoff starting from $s_t$(in the former case)
+They can be both decomposed as the sum of the immediate
+reward received $r_{t+1}$ and the future rewards.
+
+The state-value function can again be decomposed into immediate reward
+plus discounted value of successor state (Bellman Expectation Equation):
+\[
+  V(s) = \mathbb{E}[r_{t+1} + \gamma V(s_{t+1})| s_t = s]  
+\]
+The action-value function can be similarly decomposed:
+\[
+  Q(s,a) = \mathbb{E}[r_{t+1} + \gamma V(s_{t+1})| s_t = s, a_t = a]  
+\]
+At the beginning the table $Q(\cdot,\cdot)$ is initialized with random values. At time $t$,
+\[
+  Q(s_t,a_t) \leftarrow Q(s_t,a_t) + \beta \left[r_{t+1} + \gamma \max_{a \in \mathcal{A}} Q(s_{t+1},a) - Q(s_t,a_t)\right]  
+\]
+The parameters are the discount factor $\gamma$, the learning rate $\beta$, the action selection strategy $\pi(s_t, a_t)$ ; $\epsilon$-Greedy is the most common choice during learning but
+sufficient exploration must be guarantee to tackle the exploration-exploitation dilemma.
+
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/3dPlots.png}
+\end{center}
+
+Tabular representation is infeasible in practice and
+approximators must be used for interesting problems. Reinforcement learning computes an unknown value
+function while also trying to approximate it. 
+Approximator works on intermediate estimates while also providing information for the learning.
+Convergence is not guaranteed.\\
+
+Let's now consider this simple empty environment with one start position (yellow) and one goal position (blue):
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/EmptyGrid.png}
+\end{center}
+Here is the solution using a search algorithm:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/GridSolutionUsingSearch.png}
+\end{center}
+When applying reinforcement learning we need to select a reward function. Let’s keep it simple, zero everywhere, except when we reach the goal
+when we reach the goal, we receive one.
+Let’s measure the performance as the average number of steps in the last 100 problems.
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/AvgSteps100Problems.png}
+\end{center}
+Search finds a solution, reinforcement learning an action value function.
+Here in the figure below is represented the best action for every position based on the action-value function on the left, while on the right the computed action value function:
+\begin{multicols}{2}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/GridBestAction.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.24]{../images/5/ActionValueFunction.png}
+\end{center}
+\end{multicols}
+
+Let's consider another example. On the left is the new problem to solve while on the right there is the solution found by using the A* search algorithm:
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/5/GridWithBarriers.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/5/GridBarriersSolution.png}
+    \end{center}
+\end{multicols}
+Down below the solution obtained using reinforcement learning:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/5/SolutionRL.png}
+\end{center}
+On the slides there is also the computed action value function for this last example problem.
+
+
+
+\subsubsection{Supervised learning}
+Given a set of inputs-output pairs $(x_1, y_1)\dots, (x_N, y_N)$ it learns to produce the correct output for a new set of unseen data points.
+When the target values are real values, we have a regression problem. When they are discrete or symbolic, we have a classification problem.
