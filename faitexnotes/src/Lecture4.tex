@@ -48,15 +48,221 @@ if the state is a goal state. A step cost c(s,a,s’) of an action a from s to s
 \subsubsection{The state space}
 The space state is a directed graph with nodes representing states, arcs representing actions. There is an arc from s to s’ if and only if s’ is a successor of s
 \begin{center}
-    \includegraphics[scale=0.2]{"../images/4/StateSpace.png"}    
+    \includegraphics[scale=0.3]{"../images/4/StateSpace.png"}    
 \end{center}
 
 The solution to a search problem is a path
 in the state space from the initial state
 to a state that satisfies the goal test
 
+\subsubsection{The optimal solution}
+The optimal solution is the solution with the lowest cost. The cost of a path (path cost) is the sum of the costs
+of the arcs that compose the path (step costs)
+\textbf{A problem could have no solution!} Consider, for example, a case in which the starting and the ending point are in two different "island" like in the figure (the graph) above.\\
 
-Difference between the search tree and the state space. The state space is not saved anywhere, the search tree instead is saved and even represent a trace of state which correspond to the solution of the problem. 
+How many states has the state space of the n-puzzle?
+\begin{itemize}
+\item The 8-puzzle has 9! (362880) states
+\item The 15-puzzle has 16! (~1.3x1012) states
+\item The 24-puzzle has 25! (~1025) states
+\end{itemize}
 
-Question at the end of the lecture on why don't we always use the graph search rather than the tree search. The answer is that we have the closed list to mantain and if we use it with graph it becomes too big during the match duration. While the tree is very less expensive and it is more feasible.
+It is usually impossible to build an explicit representation of the entire state space. Consider the n-puzzle problem: suppose to generate 100 millions of states per second, it would requite 0.036 seconds to generate the 8-puzzle state space. The 15-puzzle would require a little less than 4 hours, the 24-puzzle would require more than 109 years
+
+This is also an issue of memory not just time: the number of states in the game of chess is $10^{43}$-$10^{50}$, the game of go has $10^{170}$ states, the estimated number of atoms in the universe is between $10^{79}$ and $10^{81}$.\\
+
+\textbf{A problem-solving agent must find (build) a solution by
+exploring only a small portion of the state space.}
+
+Search problems are typical of agents that operate in
+environments that are fully observable, static, discrete,
+and deterministic.
+
+\subsection{Abstraction}
+A state is an abstract representation of possible physical situations
+that share the same fundamental properties and differ in some
+details.
+A state of the 8-puzzle represents a set of possible physical
+situations that share the relative positions of the tiles but might
+differ in the colors of the tiles, in the materials of the tiles, etc.
+
+\subsection{The Eight-Queens Puzzle}
+The objective is to position 8 queens in a chessboard so that
+no two queens are in the same row, column, or diagonal.
+\begin{center}
+    \includegraphics[scale=0.5]{../images/4/QueenPuzzleCases.png}
+\end{center}
+A first formulation could be:
+\begin{itemize}
+    \item States: all arrangements of 0, 1, 2, ..., 8 queens on the board. The state space contains 64 x 63 x ... x 57 $\sim$ $1.8\times10^{14}$ states
+    \item Initial state: 0 queens on the board
+    \item Function actions(): all the possible ways to add one queen in an empty square
+    \item Function result()
+    \item Goal test: 8 queens are on the board, with no queens attacking each other
+    \item Step cost: irrelevant, unitary
+\end{itemize}
+A second formulation could be:
+\begin{itemize}
+    \item States: all arrangements of $k = 0, 1, 2, ..., 8$ queens in the $k$ leftmost columns with no two queens attacking each other
+    \item The state space is made of 2057 states
+    \item Initial state: 0 queens on the board
+    \item Function actions(): all the possible ways to add one queen in any square that is not attacked by any queen already in the board, in the leftmost empty column
+    \item Function result():
+    \item Goal test: 8 queens are on the board
+    \item Step cost: irrelevant, unitary
+\end{itemize}
+
+
+In \textbf{automatic assembly problems}, the aim is to find an
+order in which to assemble the parts of some object. A good automatic assembly sequence should allow to add parts later in the sequence without undoing some of the work already done.
+
+\subsection{Path planning problems}
+An example of path planning problem is the cleaner robot which, from a starting point, has to reach another point while avoiding obstacles.
+\begin{center}
+    \includegraphics[scale=0.5]{../images/4/PathPlanningProblem.png}
+\end{center}
+What are the possible states?
+How is the function actions(s) defined?
+And the function result(s,a)?
+And the goal test?
+
+\subsubsection{First formulation}
+First formulation of path planning. The cost for a horizontal or vertical movement is1; 1.41 for a diagonal movement.
+\begin{multicols}{2}
+\begin{center}
+    \includegraphics[scale=0.4]{../images/4/PathPlanningGrid.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.4]{../images/4/PathPlanningFirstPath.png}
+\end{center}
+\end{multicols}
+
+\subsubsection{Second formulation}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.4]{../images/4/PathPlanningSecondPath.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.4]{../images/4/SolutionSecondPath.png}
+    \end{center}
+\end{multicols}
+
+\subsubsection{Third formulation}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.4]{../images/4/PathPlanningThirdPath.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.4]{../images/4/SolutionThirdPath.png}
+    \end{center}
+\end{multicols}
+
+\subsection{Searching for solution}
+Solutions to a search problem are found by
+building a search tree from the space state graph.
+\begin{center}
+    \includegraphics[scale=0.25]{../images/4/SolutionSearchTree.png}
+\end{center}
+A \textbf{search tree} is composed of search nodes. Each node corresponds to a path from the initial state to a state in the state space. Each state of the space state can correspond to multiple nodes, when a state can be reached, from the initial state, following multiple paths.
+
+If the states can be visited multiple times,
+then the search tree can be infinite
+even if the state space is finite!
+
+\begin{center}
+    \includegraphics[scale=0.25]{../images/4/NodesAndStates.png}
+\end{center}
+
+In the figure you can see that the starting state is obtained again during the search. This would end up in a infinite loop of the search tree.
+
+\subsubsection{Nodes data structure}
+\begin{verbatim}
+class Node:
+    def __init__(self, state, parent=None, action=None, path_cost=0):
+    """Create a search tree Node, derived from a parent by an action."""
+    self.state = state
+    self.parent = parent
+    self.action = action
+    self.path_cost = path_cost
+    self.depth = 0
+    if parent:
+        self.depth = parent.depth + 1
+\end{verbatim}
+
+\subsubsection{Tree search algorithm}
+\begin{verbatim}
+Initialize the root of the tree with the initial state of problem
+
+LOOP DO
+    IF there are no more nodes candidate for expansion
+        THEN RETURN failure
+    select a node not yet expanded
+    IF the node corresponds to a goal state
+        THEN RETURN the corresponding solution
+        ELSE expand the chosen node, adding the resulting nodes to the tree
+\end{verbatim}
+
+\subsubsection{Frontier}
+The frontier is the set of nodes of the search tree that have been generated, but not yet chosen. The frontier is implemented as a priority queue.
+\begin{center}
+    \includegraphics[scale=0.25]{../images/4/Frontier.png}
+\end{center}
+
+\begin{itemize}
+    \item Search Strategies: A search strategy determines the ordering of nodes in the frontier
+    \item Node Selection: The first node in the frontier is usually selected    
+\end{itemize}
+The expansion of a node in the search tree involves two steps:
+\begin{enumerate}
+    \item Apply function actions() to the state s of node n to compute all the available actions
+    \item For each action a, compute the successor state s’ using result(s,a) and generate a child node for each successor state
+\end{enumerate}
+The new generated nodes are inserted in the frontier.
+The node expansion code from the textbook's notebook is:
+\begin{verbatim}
+def expand(self, problem):
+    """List the nodes reachable in one step from this node."""
+    return [self.child_node(problem, action) for action in problem.actions(self.state)]
+def child_node(self, problem, action):
+    """[Figure 3.10]"""
+    next_state = problem.result(self.state, action)
+    next_node = Node(next_state, self, action, \
+        problem.path_cost(self.path_cost, self.state, action, next_state))
+    return next_node
+\end{verbatim}
+The search strategies discussed so far can generate many nodes (in the search tree) corresponding to the same state (in the state space). This is unavoidable in problems with reversible actions. Such “repeated states” (revisited states) can generate infinite search trees even
+if the state space is finite. The search thus becomes inefficient.
+
+To avoid repeated states, we need to be able to compare the states corresponding to nodes. We use a closed list containing the states from nodes already selected from the frontier. When a node is chosen for expansion, its state is checked against the closed list. When a node is expanded, its state is added to the closed list.
+
+\subsubsection{Graph search algorithm}
+\begin{verbatim}
+initialize the root of the tree with the initial state of problem
+initialize the closed list to the empty set
+LOOP DO
+    IF there are no more nodes candidate for expansion
+        THEN RETURN failure
+    choose a node not yet expanded
+    IF the node corresponds to a goal state
+        THEN RETURN the corresponding solution
+        ELSE IF the state corresponding to the node is not in the list
+            THEN add the corresponding state to the closed list
+                expand the chosen node, adding the resulting nodes to the tree
+\end{verbatim}
+\begin{center}
+    \includegraphics[scale=0.25]{../images/4/FiniteInfiniteSearchTree.png}
+\end{center}
+
+\subsubsection{Best first search}
+\begin{center}
+    \includegraphics[scale=0.35]{../images/4/BestFirstAlgorithm.png}
+\end{center}
+
+
+
+
+
+%Difference between the search tree and the state space. The state space is not saved anywhere, the search tree instead is saved and even represent a trace of state which correspond to the solution of the problem. 
+
+%Question at the end of the lecture on why don't we always use the graph search rather than the tree search. The answer is that we have the closed list to mantain and if we use it with graph it becomes too big during the match duration. While the tree is very less expensive and it is more feasible.
  
