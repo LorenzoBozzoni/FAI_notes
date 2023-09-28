@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.17)  25 SEP 2023 13:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.17)  27 SEP 2023 14:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -359,43 +359,51 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-)) (/usr/local/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+)) (/usr/local/texlive/2023/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Package: fancyvrb 2023/01/19 4.5a verbatim text (tvz,hv)
+\FV@CodeLineNo=\count305
+\FV@InFile=\read2
+\FV@TabBox=\box103
+\c@FancyVerbLine=\count306
+\FV@StepNumber=\count307
+\FV@OutFile=\write3
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2023-04-19 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count305
-\l__pdf_internal_box=\box103
-) (./main.aux (./Lecture1.aux) (./Lecture2.aux) (./Lecture4.aux) (./Lecture5.aux))
+\l__color_backend_stack_int=\count308
+\l__pdf_internal_box=\box104
+) (./main.aux (./Lecture1.aux) (./Lecture2.aux) (./Lecture4.aux) (./Lecture5.aux) (./Lecture6.aux))
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
  (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count306
+\scratchcounter=\count309
 \scratchdimen=\dimen177
-\scratchbox=\box104
-\nofMPsegments=\count307
-\nofMParguments=\count308
+\scratchbox=\box105
+\nofMPsegments=\count310
+\nofMParguments=\count311
 \everyMPshowfont=\toks29
-\MPscratchCnt=\count309
+\MPscratchCnt=\count312
 \MPscratchDim=\dimen178
-\MPnumerator=\count310
-\makeMPintoPDFobject=\count311
+\MPnumerator=\count313
+\makeMPintoPDFobject=\count314
 \everyMPtoPDFconversion=\toks30
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -403,10 +411,10 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/local/texlive/2023/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 19.
+Package hyperref Info: Link coloring OFF on input line 20.
  (./main.out) (./main.out)
-\@outlinefile=\write3
-\openout3 = `main.out'.
+\@outlinefile=\write4
+\openout4 = `main.out'.
 
 
 *geometry* driver: auto-detecting
@@ -443,17 +451,17 @@ Package hyperref Info: Link coloring OFF on input line 19.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@lstlisting=\count312
-LaTeX Font Info:    Trying to load font information for U+msa on input line 21.
+\c@lstlisting=\count315
+LaTeX Font Info:    Trying to load font information for U+msa on input line 22.
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 21.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 22.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (./main.toc)
-\tf@toc=\write4
-\openout4 = `main.toc'.
+\tf@toc=\write5
+\openout5 = `main.toc'.
 
  [1
 
@@ -478,12 +486,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 14--17
 \openout2 = `Lecture4.aux'.
 
  (./Lecture4.tex
-<../images/4/SolvingProblems.png, id=83, 1266.7325pt x 738.76pt>
+<../images/4/SolvingProblems.png, id=143, 1266.7325pt x 738.76pt>
 File: ../images/4/SolvingProblems.png Graphic file (type png)
 <use ../images/4/SolvingProblems.png>
 Package pdftex.def Info: ../images/4/SolvingProblems.png  used on input line 15.
 (pdftex.def)             Requested size: 253.34201pt x 147.74937pt.
-<../images/4/8puzzle.png, id=85, 1173.38374pt x 642.4pt>
+<../images/4/8puzzle.png, id=145, 1173.38374pt x 642.4pt>
 File: ../images/4/8puzzle.png Graphic file (type png)
 <use ../images/4/8puzzle.png>
 Package pdftex.def Info: ../images/4/8puzzle.png  used on input line 20.
@@ -494,7 +502,7 @@ File: omscmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 29.
-<../images/4/ActionFunction.png, id=86, 589.20125pt x 504.88625pt>
+<../images/4/ActionFunction.png, id=146, 589.20125pt x 504.88625pt>
 File: ../images/4/ActionFunction.png Graphic file (type png)
 <use ../images/4/ActionFunction.png>
 Package pdftex.def Info: ../images/4/ActionFunction.png  used on input line 32.
@@ -504,7 +512,7 @@ Package pdftex.def Info: ../images/4/ActionFunction.png  used on input line 32.
 
 
 {/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc} <../images/4/SolvingProblems.png> <../images/4/8puzzle.png> <../images/4/ActionFunction.png>]
-<../images/4/StateSpace.png, id=98, 589.20125pt x 459.7175pt>
+<../images/4/StateSpace.png, id=158, 589.20125pt x 459.7175pt>
 File: ../images/4/StateSpace.png Graphic file (type png)
 <use ../images/4/StateSpace.png>
 Package pdftex.def Info: ../images/4/StateSpace.png  used on input line 51.
@@ -519,44 +527,44 @@ Underfull \hbox (badness 10000) in paragraph at lines 72--73
 
  []
 
-<../images/4/QueenPuzzleCases.png, id=99, 805.0075pt x 342.27875pt>
+<../images/4/QueenPuzzleCases.png, id=159, 805.0075pt x 342.27875pt>
 File: ../images/4/QueenPuzzleCases.png Graphic file (type png)
 <use ../images/4/QueenPuzzleCases.png>
 Package pdftex.def Info: ../images/4/QueenPuzzleCases.png  used on input line 93.
 (pdftex.def)             Requested size: 402.50278pt x 171.13895pt.
 [5 <../images/4/StateSpace.png>]
-<../images/4/PathPlanningProblem.png, id=110, 584.1825pt x 347.2975pt>
+<../images/4/PathPlanningProblem.png, id=171, 584.1825pt x 347.2975pt>
 File: ../images/4/PathPlanningProblem.png Graphic file (type png)
 <use ../images/4/PathPlanningProblem.png>
 Package pdftex.def Info: ../images/4/PathPlanningProblem.png  used on input line 122.
 (pdftex.def)             Requested size: 292.09053pt x 173.64832pt.
  [6 <../images/4/QueenPuzzleCases.png>]
-<../images/4/PathPlanningGrid.png, id=116, 584.1825pt x 347.2975pt>
+<../images/4/PathPlanningGrid.png, id=177, 584.1825pt x 347.2975pt>
 File: ../images/4/PathPlanningGrid.png Graphic file (type png)
 <use ../images/4/PathPlanningGrid.png>
 Package pdftex.def Info: ../images/4/PathPlanningGrid.png  used on input line 133.
 (pdftex.def)             Requested size: 233.66885pt x 138.91653pt.
-<../images/4/PathPlanningFirstPath.png, id=117, 584.1825pt x 347.2975pt>
+<../images/4/PathPlanningFirstPath.png, id=178, 584.1825pt x 347.2975pt>
 File: ../images/4/PathPlanningFirstPath.png Graphic file (type png)
 <use ../images/4/PathPlanningFirstPath.png>
 Package pdftex.def Info: ../images/4/PathPlanningFirstPath.png  used on input line 136.
 (pdftex.def)             Requested size: 233.66885pt x 138.91653pt.
-<../images/4/PathPlanningSecondPath.png, id=118, 584.1825pt x 347.2975pt>
+<../images/4/PathPlanningSecondPath.png, id=179, 584.1825pt x 347.2975pt>
 File: ../images/4/PathPlanningSecondPath.png Graphic file (type png)
 <use ../images/4/PathPlanningSecondPath.png>
 Package pdftex.def Info: ../images/4/PathPlanningSecondPath.png  used on input line 143.
 (pdftex.def)             Requested size: 233.66885pt x 138.91653pt.
-<../images/4/SolutionSecondPath.png, id=119, 584.1825pt x 347.2975pt>
+<../images/4/SolutionSecondPath.png, id=180, 584.1825pt x 347.2975pt>
 File: ../images/4/SolutionSecondPath.png Graphic file (type png)
 <use ../images/4/SolutionSecondPath.png>
 Package pdftex.def Info: ../images/4/SolutionSecondPath.png  used on input line 146.
 (pdftex.def)             Requested size: 233.66885pt x 138.91653pt.
-<../images/4/PathPlanningThirdPath.png, id=120, 584.1825pt x 347.2975pt>
+<../images/4/PathPlanningThirdPath.png, id=181, 584.1825pt x 347.2975pt>
 File: ../images/4/PathPlanningThirdPath.png Graphic file (type png)
 <use ../images/4/PathPlanningThirdPath.png>
 Package pdftex.def Info: ../images/4/PathPlanningThirdPath.png  used on input line 153.
 (pdftex.def)             Requested size: 233.66885pt x 138.91653pt.
-<../images/4/SolutionThirdPath.png, id=121, 584.1825pt x 347.2975pt>
+<../images/4/SolutionThirdPath.png, id=182, 584.1825pt x 347.2975pt>
 File: ../images/4/SolutionThirdPath.png Graphic file (type png)
 <use ../images/4/SolutionThirdPath.png>
 Package pdftex.def Info: ../images/4/SolutionThirdPath.png  used on input line 156.
@@ -568,29 +576,29 @@ Overfull \vbox (38.13527pt too high) has occurred while \output is active []
 Overfull \vbox (38.13527pt too high) has occurred while \output is active []
 
  [7 <../images/4/PathPlanningProblem.png> <../images/4/PathPlanningGrid.png> <../images/4/PathPlanningFirstPath.png> <../images/4/PathPlanningSecondPath.png> <../images/4/SolutionSecondPath.png> <../images/4/PathPlanningThirdPath.png>]
-<../images/4/SolutionSearchTree.png, id=136, 1320.935pt x 723.70375pt>
+<../images/4/SolutionSearchTree.png, id=197, 1320.935pt x 723.70375pt>
 File: ../images/4/SolutionSearchTree.png Graphic file (type png)
 <use ../images/4/SolutionSearchTree.png>
 Package pdftex.def Info: ../images/4/SolutionSearchTree.png  used on input line 164.
 (pdftex.def)             Requested size: 330.23294pt x 180.92549pt.
-<../images/4/NodesAndStates.png, id=137, 735.74875pt x 487.8225pt>
+<../images/4/NodesAndStates.png, id=198, 735.74875pt x 487.8225pt>
 File: ../images/4/NodesAndStates.png Graphic file (type png)
 <use ../images/4/NodesAndStates.png>
 Package pdftex.def Info: ../images/4/NodesAndStates.png  used on input line 173.
 (pdftex.def)             Requested size: 183.93674pt x 121.95532pt.
  [8 <../images/4/SolutionThirdPath.png> <../images/4/SolutionSearchTree.png> <../images/4/NodesAndStates.png>]
-<../images/4/Frontier.png, id=147, 803.0pt x 487.8225pt>
+<../images/4/Frontier.png, id=209, 803.0pt x 487.8225pt>
 File: ../images/4/Frontier.png Graphic file (type png)
 <use ../images/4/Frontier.png>
 Package pdftex.def Info: ../images/4/Frontier.png  used on input line 208.
 (pdftex.def)             Requested size: 200.74951pt x 121.95532pt.
  [9 <../images/4/Frontier.png>]
-<../images/4/FiniteInfiniteSearchTree.png, id=157, 1312.905pt x 656.4525pt>
+<../images/4/FiniteInfiniteSearchTree.png, id=219, 1312.905pt x 656.4525pt>
 File: ../images/4/FiniteInfiniteSearchTree.png Graphic file (type png)
 <use ../images/4/FiniteInfiniteSearchTree.png>
 Package pdftex.def Info: ../images/4/FiniteInfiniteSearchTree.png  used on input line 253.
 (pdftex.def)             Requested size: 328.22545pt x 164.11272pt.
-<../images/4/BestFirstAlgorithm.png, id=158, 905.3825pt x 660.4675pt>
+<../images/4/BestFirstAlgorithm.png, id=220, 905.3825pt x 660.4675pt>
 File: ../images/4/BestFirstAlgorithm.png Graphic file (type png)
 <use ../images/4/BestFirstAlgorithm.png>
 Package pdftex.def Info: ../images/4/BestFirstAlgorithm.png  used on input line 258.
@@ -599,40 +607,40 @@ Package pdftex.def Info: ../images/4/BestFirstAlgorithm.png  used on input line 
 \openout2 = `Lecture5.aux'.
 
  (./Lecture5.tex
-<../images/5/LearningAgents.png, id=167, 1323.94624pt x 630.355pt>
+<../images/5/LearningAgents.png, id=229, 1323.94624pt x 630.355pt>
 File: ../images/5/LearningAgents.png Graphic file (type png)
 <use ../images/5/LearningAgents.png>
 Package pdftex.def Info: ../images/5/LearningAgents.png  used on input line 16.
 (pdftex.def)             Requested size: 397.18694pt x 189.10796pt.
-<../images/5/ApplicationOfML.png, id=168, 1323.94624pt x 630.355pt>
+<../images/5/ApplicationOfML.png, id=230, 1323.94624pt x 630.355pt>
 File: ../images/5/ApplicationOfML.png Graphic file (type png)
 <use ../images/5/ApplicationOfML.png>
-Package pdftex.def Info: ../images/5/ApplicationOfML.png  used on input line 37.
+Package pdftex.def Info: ../images/5/ApplicationOfML.png  used on input line 38.
 (pdftex.def)             Requested size: 397.18694pt x 189.10796pt.
  [11
 
 
 
  <../images/5/LearningAgents.png>]
-<../images/5/ProgrammingVsMachineLearning.png, id=174, 1352.05125pt x 355.3275pt>
+<../images/5/ProgrammingVsMachineLearning.png, id=236, 1352.05125pt x 355.3275pt>
 File: ../images/5/ProgrammingVsMachineLearning.png Graphic file (type png)
 <use ../images/5/ProgrammingVsMachineLearning.png>
-Package pdftex.def Info: ../images/5/ProgrammingVsMachineLearning.png  used on input line 41.
+Package pdftex.def Info: ../images/5/ProgrammingVsMachineLearning.png  used on input line 42.
 (pdftex.def)             Requested size: 405.6185pt x 106.59906pt.
-<../images/5/MLTaxonomy.png, id=175, 1290.8225pt x 503.8825pt>
+<../images/5/MLTaxonomy.png, id=237, 1290.8225pt x 503.8825pt>
 File: ../images/5/MLTaxonomy.png Graphic file (type png)
 <use ../images/5/MLTaxonomy.png>
-Package pdftex.def Info: ../images/5/MLTaxonomy.png  used on input line 46.
+Package pdftex.def Info: ../images/5/MLTaxonomy.png  used on input line 47.
 (pdftex.def)             Requested size: 387.24974pt x 151.16591pt.
-<../images/5/AgentEnvironment.png, id=176, 943.525pt x 349.305pt>
+<../images/5/AgentEnvironment.png, id=238, 943.525pt x 349.305pt>
 File: ../images/5/AgentEnvironment.png Graphic file (type png)
 <use ../images/5/AgentEnvironment.png>
-Package pdftex.def Info: ../images/5/AgentEnvironment.png  used on input line 60.
+Package pdftex.def Info: ../images/5/AgentEnvironment.png  used on input line 61.
 (pdftex.def)             Requested size: 188.70164pt x 69.85976pt.
-<../images/5/AgentEnvironmentPlus1.png, id=177, 943.525pt x 349.305pt>
+<../images/5/AgentEnvironmentPlus1.png, id=239, 943.525pt x 349.305pt>
 File: ../images/5/AgentEnvironmentPlus1.png Graphic file (type png)
 <use ../images/5/AgentEnvironmentPlus1.png>
-Package pdftex.def Info: ../images/5/AgentEnvironmentPlus1.png  used on input line 63.
+Package pdftex.def Info: ../images/5/AgentEnvironmentPlus1.png  used on input line 64.
 (pdftex.def)             Requested size: 188.70164pt x 69.85976pt.
 
 Overfull \vbox (14.3729pt too high) has occurred while \output is active []
@@ -641,89 +649,187 @@ Overfull \vbox (14.3729pt too high) has occurred while \output is active []
 Overfull \vbox (14.3729pt too high) has occurred while \output is active []
 
  [12 <../images/5/ApplicationOfML.png> <../images/5/ProgrammingVsMachineLearning.png> <../images/5/MLTaxonomy.png> <../images/5/AgentEnvironment.png>]
-<../images/5/AgentEnvironmentInteraction.png, id=189, 1213.53375pt x 548.0475pt>
+<../images/5/AgentEnvironmentInteraction.png, id=250, 1213.53375pt x 548.0475pt>
 File: ../images/5/AgentEnvironmentInteraction.png Graphic file (type png)
 <use ../images/5/AgentEnvironmentInteraction.png>
-Package pdftex.def Info: ../images/5/AgentEnvironmentInteraction.png  used on input line 69.
+Package pdftex.def Info: ../images/5/AgentEnvironmentInteraction.png  used on input line 70.
 (pdftex.def)             Requested size: 364.06294pt x 164.41551pt.
-<../images/5/CarMountain.png, id=190, 928.46875pt x 555.07375pt>
+<../images/5/CarMountain.png, id=251, 928.46875pt x 555.07375pt>
 File: ../images/5/CarMountain.png Graphic file (type png)
 <use ../images/5/CarMountain.png>
-Package pdftex.def Info: ../images/5/CarMountain.png  used on input line 92.
+Package pdftex.def Info: ../images/5/CarMountain.png  used on input line 93.
 (pdftex.def)             Requested size: 278.54277pt x 166.52339pt.
  [13 <../images/5/AgentEnvironmentPlus1.png> <../images/5/AgentEnvironmentInteraction.png> <../images/5/CarMountain.png>] [14]
-<../images/5/3dPlots.png, id=206, 1131.22626pt x 600.2425pt>
+<../images/5/3dPlots.png, id=267, 1131.22626pt x 600.2425pt>
 File: ../images/5/3dPlots.png Graphic file (type png)
 <use ../images/5/3dPlots.png>
-Package pdftex.def Info: ../images/5/3dPlots.png  used on input line 179.
+Package pdftex.def Info: ../images/5/3dPlots.png  used on input line 181.
 (pdftex.def)             Requested size: 339.3705pt x 180.07413pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 182--187
+Underfull \hbox (badness 10000) in paragraph at lines 184--189
 
  []
 
-<../images/5/EmptyGrid.png, id=207, 543.02875pt x 538.01pt>
+<../images/5/EmptyGrid.png, id=268, 543.02875pt x 538.01pt>
 File: ../images/5/EmptyGrid.png Graphic file (type png)
 <use ../images/5/EmptyGrid.png>
-Package pdftex.def Info: ../images/5/EmptyGrid.png  used on input line 190.
+Package pdftex.def Info: ../images/5/EmptyGrid.png  used on input line 192.
 (pdftex.def)             Requested size: 162.90987pt x 161.40424pt.
-<../images/5/GridSolutionUsingSearch.png, id=208, 543.02875pt x 538.01pt>
+<../images/5/GridSolutionUsingSearch.png, id=269, 543.02875pt x 538.01pt>
 File: ../images/5/GridSolutionUsingSearch.png Graphic file (type png)
 <use ../images/5/GridSolutionUsingSearch.png>
-Package pdftex.def Info: ../images/5/GridSolutionUsingSearch.png  used on input line 194.
+Package pdftex.def Info: ../images/5/GridSolutionUsingSearch.png  used on input line 196.
 (pdftex.def)             Requested size: 162.90987pt x 161.40424pt.
 [15 <../images/5/3dPlots.png> <../images/5/EmptyGrid.png> <../images/5/GridSolutionUsingSearch.png>]
-<../images/5/AvgSteps100Problems.png.png, id=216, 771.88374pt x 506.89375pt>
+<../images/5/AvgSteps100Problems.png.png, id=277, 771.88374pt x 506.89375pt>
 File: ../images/5/AvgSteps100Problems.png.png Graphic file (type png)
 <use ../images/5/AvgSteps100Problems.png.png>
-Package pdftex.def Info: ../images/5/AvgSteps100Problems.png.png  used on input line 200.
+Package pdftex.def Info: ../images/5/AvgSteps100Problems.png.png  used on input line 202.
 (pdftex.def)             Requested size: 231.56691pt x 152.06929pt.
-<../images/5/GridBestAction.png, id=217, 543.02875pt x 538.01pt>
+<../images/5/GridBestAction.png, id=278, 543.02875pt x 538.01pt>
 File: ../images/5/GridBestAction.png Graphic file (type png)
 <use ../images/5/GridBestAction.png>
-Package pdftex.def Info: ../images/5/GridBestAction.png  used on input line 206.
+Package pdftex.def Info: ../images/5/GridBestAction.png  used on input line 208.
 (pdftex.def)             Requested size: 162.90987pt x 161.40424pt.
-<../images/5/ActionValueFunction.png, id=218, 841.1425pt x 653.44125pt>
+<../images/5/ActionValueFunction.png, id=279, 841.1425pt x 653.44125pt>
 File: ../images/5/ActionValueFunction.png Graphic file (type png)
 <use ../images/5/ActionValueFunction.png>
-Package pdftex.def Info: ../images/5/ActionValueFunction.png  used on input line 209.
+Package pdftex.def Info: ../images/5/ActionValueFunction.png  used on input line 211.
 (pdftex.def)             Requested size: 201.87833pt x 156.8291pt.
-<../images/5/GridWithBarriers.png, id=219, 543.02875pt x 538.01pt>
+<../images/5/GridWithBarriers.png, id=280, 543.02875pt x 538.01pt>
 File: ../images/5/GridWithBarriers.png Graphic file (type png)
 <use ../images/5/GridWithBarriers.png>
-Package pdftex.def Info: ../images/5/GridWithBarriers.png  used on input line 216.
+Package pdftex.def Info: ../images/5/GridWithBarriers.png  used on input line 218.
 (pdftex.def)             Requested size: 162.90987pt x 161.40424pt.
-<../images/5/GridBarriersSolution.png, id=220, 543.02875pt x 538.01pt>
+<../images/5/GridBarriersSolution.png, id=281, 543.02875pt x 538.01pt>
 File: ../images/5/GridBarriersSolution.png Graphic file (type png)
 <use ../images/5/GridBarriersSolution.png>
-Package pdftex.def Info: ../images/5/GridBarriersSolution.png  used on input line 219.
+Package pdftex.def Info: ../images/5/GridBarriersSolution.png  used on input line 221.
 (pdftex.def)             Requested size: 162.90987pt x 161.40424pt.
-<../images/5/SolutionRL.png, id=221, 1222.5675pt x 464.73625pt>
+<../images/5/SolutionRL.png, id=282, 1222.5675pt x 464.73625pt>
 File: ../images/5/SolutionRL.png Graphic file (type png)
 <use ../images/5/SolutionRL.png>
-Package pdftex.def Info: ../images/5/SolutionRL.png  used on input line 224.
+Package pdftex.def Info: ../images/5/SolutionRL.png  used on input line 226.
 (pdftex.def)             Requested size: 366.77307pt x 139.42194pt.
- [16 <../images/5/AvgSteps100Problems.png.png> <../images/5/GridBestAction.png> <../images/5/ActionValueFunction.png> <../images/5/GridWithBarriers.png> <../images/5/GridBarriersSolution.png>]) [17 <../images/5/SolutionRL.png>] (./main.aux (./Lecture1.aux) (./Lecture2.aux) (./Lecture4.aux) (./Lecture5.aux))
+ [16 <../images/5/AvgSteps100Problems.png.png> <../images/5/GridBestAction.png> <../images/5/ActionValueFunction.png> <../images/5/GridWithBarriers.png> <../images/5/GridBarriersSolution.png>]) [17 <../images/5/SolutionRL.png>]
+\openout2 = `Lecture6.aux'.
+
+ (./Lecture6.tex
+Underfull \hbox (badness 10000) in paragraph at lines 2--4
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 57--59
+
+ []
+
+[18
+
+
+
+]
+<../images/6/BreadthFirstExample.png, id=307, 756.8275pt x 318.18875pt>
+File: ../images/6/BreadthFirstExample.png Graphic file (type png)
+<use ../images/6/BreadthFirstExample.png>
+Package pdftex.def Info: ../images/6/BreadthFirstExample.png  used on input line 62.
+(pdftex.def)             Requested size: 302.72563pt x 127.27324pt.
+<../images/6/BreadthFirstFrontier.png, id=308, 606.265pt x 294.09875pt>
+File: ../images/6/BreadthFirstFrontier.png Graphic file (type png)
+<use ../images/6/BreadthFirstFrontier.png>
+Package pdftex.def Info: ../images/6/BreadthFirstFrontier.png  used on input line 67.
+(pdftex.def)             Requested size: 242.5017pt x 117.6374pt.
+<../images/6/WorstCaseBreadthFirst.png, id=309, 569.12625pt x 404.51125pt>
+File: ../images/6/WorstCaseBreadthFirst.png Graphic file (type png)
+<use ../images/6/WorstCaseBreadthFirst.png>
+Package pdftex.def Info: ../images/6/WorstCaseBreadthFirst.png  used on input line 79.
+(pdftex.def)             Requested size: 227.64647pt x 161.80162pt.
+ [19 <../images/6/BreadthFirstExample.png> <../images/6/BreadthFirstFrontier.png> <../images/6/WorstCaseBreadthFirst.png>]
+<../images/6/WorstCaseVariant.png, id=319, 584.1825pt x 405.515pt>
+File: ../images/6/WorstCaseVariant.png Graphic file (type png)
+<use ../images/6/WorstCaseVariant.png>
+Package pdftex.def Info: ../images/6/WorstCaseVariant.png  used on input line 85.
+(pdftex.def)             Requested size: 233.66885pt x 162.20311pt.
+<../images/6/BreadthFirstAlgorithm.png, id=320, 882.29625pt x 452.69125pt>
+File: ../images/6/BreadthFirstAlgorithm.png Graphic file (type png)
+<use ../images/6/BreadthFirstAlgorithm.png>
+Package pdftex.def Info: ../images/6/BreadthFirstAlgorithm.png  used on input line 89.
+(pdftex.def)             Requested size: 352.91225pt x 181.07329pt.
+ [20 <../images/6/WorstCaseVariant.png> <../images/6/BreadthFirstAlgorithm.png>]
+<../images/6/UniformCostSearch.png, id=327, 882.29625pt x 91.34125pt>
+File: ../images/6/UniformCostSearch.png Graphic file (type png)
+<use ../images/6/UniformCostSearch.png>
+Package pdftex.def Info: ../images/6/UniformCostSearch.png  used on input line 139.
+(pdftex.def)             Requested size: 352.91225pt x 36.53584pt.
+<../images/6/DepthFirstSearch.png, id=328, 664.4825pt x 411.5375pt>
+File: ../images/6/DepthFirstSearch.png Graphic file (type png)
+<use ../images/6/DepthFirstSearch.png>
+Package pdftex.def Info: ../images/6/DepthFirstSearch.png  used on input line 154.
+(pdftex.def)             Requested size: 265.78828pt x 164.61208pt.
+ [21 <../images/6/UniformCostSearch.png> <../images/6/DepthFirstSearch.png>]
+<../images/6/DepthFirstExample.png, id=337, 715.67375pt x 410.53375pt>
+File: ../images/6/DepthFirstExample.png Graphic file (type png)
+<use ../images/6/DepthFirstExample.png>
+Package pdftex.def Info: ../images/6/DepthFirstExample.png  used on input line 160.
+(pdftex.def)             Requested size: 286.26442pt x 164.21059pt.
+ [22 <../images/6/DepthFirstExample.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 215--217
+
+ []
+
+<../images/6/IterativeDeepeningSearch.png, id=345, 791.95876pt x 667.49374pt>
+File: ../images/6/IterativeDeepeningSearch.png Graphic file (type png)
+<use ../images/6/IterativeDeepeningSearch.png>
+Package pdftex.def Info: ../images/6/IterativeDeepeningSearch.png  used on input line 250.
+(pdftex.def)             Requested size: 316.7779pt x 266.99277pt.
+[23]
+<../images/6/IterativeDeepeningEx1.png, id=350, 871.255pt x 384.43625pt>
+File: ../images/6/IterativeDeepeningEx1.png Graphic file (type png)
+<use ../images/6/IterativeDeepeningEx1.png>
+Package pdftex.def Info: ../images/6/IterativeDeepeningEx1.png  used on input line 255.
+(pdftex.def)             Requested size: 130.6826pt x 57.66295pt.
+<../images/6/IDEx2.png, id=351, 871.255pt x 384.43625pt>
+File: ../images/6/IDEx2.png Graphic file (type png)
+<use ../images/6/IDEx2.png>
+Package pdftex.def Info: ../images/6/IDEx2.png  used on input line 256.
+(pdftex.def)             Requested size: 130.6826pt x 57.66295pt.
+<../images/6/IDEx3.png, id=352, 871.255pt x 384.43625pt>
+File: ../images/6/IDEx3.png Graphic file (type png)
+<use ../images/6/IDEx3.png>
+Package pdftex.def Info: ../images/6/IDEx3.png  used on input line 257.
+(pdftex.def)             Requested size: 130.6826pt x 57.66295pt.
+<../images/6/BidirectionalSearch.png, id=353, 515.9275pt x 266.9975pt>
+File: ../images/6/BidirectionalSearch.png Graphic file (type png)
+<use ../images/6/BidirectionalSearch.png>
+Package pdftex.def Info: ../images/6/BidirectionalSearch.png  used on input line 275.
+(pdftex.def)             Requested size: 206.36734pt x 106.79709pt.
+ [24 <../images/6/IterativeDeepeningSearch.png> <../images/6/IterativeDeepeningEx1.png> <../images/6/IDEx2.png> <../images/6/IDEx3.png> <../images/6/BidirectionalSearch.png>]
+<../images/6/UninformedSummary.png, id=364, 804.00375pt x 524.96124pt>
+File: ../images/6/UninformedSummary.png Graphic file (type png)
+<use ../images/6/UninformedSummary.png>
+Package pdftex.def Info: ../images/6/UninformedSummary.png  used on input line 285.
+(pdftex.def)             Requested size: 321.59581pt x 209.98077pt.
+) [25 <../images/6/UninformedSummary.png>] (./main.aux (./Lecture1.aux) (./Lecture2.aux) (./Lecture4.aux) (./Lecture5.aux) (./Lecture6.aux))
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-08-29>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 2E9C3CC8C433C76995C305D16141BC0C;1671.
+(rerunfilecheck)             Checksum: 69CFF4DB561D907A738CA4476339C777;3936.
  ) 
 Here is how much of TeX's memory you used:
- 12547 strings out of 474934
- 195230 string characters out of 5759817
+ 13097 strings out of 474934
+ 206461 string characters out of 5759817
  1933807 words of memory out of 5000000
- 33866 multiletter control sequences out of 15000+600000
- 566435 words of font info for 69 fonts, out of 8000000 for 9000
+ 34375 multiletter control sequences out of 15000+600000
+ 566781 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,6n,79p,432b,624s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (17 pages, 2179112 bytes).
+ 75i,6n,79p,433b,624s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on main.pdf (25 pages, 3115736 bytes).
 PDF statistics:
- 310 PDF objects out of 1000 (max. 8388607)
- 193 compressed objects within 2 object streams
- 48 named destinations out of 1000 (max. 500000)
- 267 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 464 PDF objects out of 1000 (max. 8388607)
+ 303 compressed objects within 4 object streams
+ 77 named destinations out of 1000 (max. 500000)
+ 433 words of extra memory for PDF output out of 10000 (max. 10000000)
 

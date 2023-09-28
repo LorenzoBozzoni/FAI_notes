@@ -176,7 +176,7 @@ even if the state space is finite!
 In the figure you can see that the starting state is obtained again during the search. This would end up in a infinite loop of the search tree.
 
 \subsubsection{Nodes data structure}
-\begin{verbatim}
+\begin{Verbatim}[numbers=left, frame=single]
 class Node:
     def __init__(self, state, parent=None, action=None, path_cost=0):
     """Create a search tree Node, derived from a parent by an action."""
@@ -187,7 +187,7 @@ class Node:
     self.depth = 0
     if parent:
         self.depth = parent.depth + 1
-\end{verbatim}
+\end{Verbatim}
 
 \subsubsection{Tree search algorithm}
 \begin{verbatim}
@@ -219,7 +219,7 @@ The expansion of a node in the search tree involves two steps:
 \end{enumerate}
 The new generated nodes are inserted in the frontier.
 The node expansion code from the textbook's notebook is:
-\begin{verbatim}
+\begin{Verbatim}[numbers=left, frame=single]
 def expand(self, problem):
     """List the nodes reachable in one step from this node."""
     return [self.child_node(problem, action) for action in problem.actions(self.state)]
@@ -229,14 +229,14 @@ def child_node(self, problem, action):
     next_node = Node(next_state, self, action, \
         problem.path_cost(self.path_cost, self.state, action, next_state))
     return next_node
-\end{verbatim}
+\end{Verbatim}
 The search strategies discussed so far can generate many nodes (in the search tree) corresponding to the same state (in the state space). This is unavoidable in problems with reversible actions. Such “repeated states” (revisited states) can generate infinite search trees even
 if the state space is finite. The search thus becomes inefficient.
 
 To avoid repeated states, we need to be able to compare the states corresponding to nodes. We use a closed list containing the states from nodes already selected from the frontier. When a node is chosen for expansion, its state is checked against the closed list. When a node is expanded, its state is added to the closed list.
 
 \subsubsection{Graph search algorithm}
-\begin{verbatim}
+\begin{Verbatim}[numbers=left, frame=single]
 initialize the root of the tree with the initial state of problem
 initialize the closed list to the empty set
 LOOP DO
@@ -248,7 +248,7 @@ LOOP DO
         ELSE IF the state corresponding to the node is not in the list
             THEN add the corresponding state to the closed list
                 expand the chosen node, adding the resulting nodes to the tree
-\end{verbatim}
+\end{Verbatim}
 \begin{center}
     \includegraphics[scale=0.25]{../images/4/FiniteInfiniteSearchTree.png}
 \end{center}

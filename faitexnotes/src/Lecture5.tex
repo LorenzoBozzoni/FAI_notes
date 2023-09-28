@@ -6,7 +6,7 @@ So far we have described the following agents:
     \item goal-based agents
     \item utility-based agents
 \end{itemize}
-Check the lecture 3 for more details.All these agents seen so far can improve their performance with learning. Every component of the agent’s decisional process can be modified in order to perform better.
+Check the lecture 3 for more details. All these agents seen so far can improve their performance with learning. Every component of the agent’s decisional process can be modified in order to perform better.
 
 Learning allows the agent to operate in initially unknown
 environments and to become more competent than its
@@ -15,6 +15,7 @@ initial knowledge alone might allow. “What kind of performance element will my
 \begin{center}
     \includegraphics[scale=0.3]{../images/5/LearningAgents.png}
 \end{center}
+The agents seen till now are inside the "performance element" block.\\
 Components:
 \begin{itemize}
     \item Learning Element: it is responsible for making improvements.
@@ -29,7 +30,7 @@ considered to be the entire agent.
 
 \subsection{Machine learning}
 “A computer program is said to learn from experience E with respect to some
-class of tasks T and performance measure P, improves with experience E” Mitchell (1997)
+class of tasks T and performance measure P, improves with experience E” Mitchell (1997).\\
 It is an area of Artificial Intelligence focused on building algorithms capable of learning, extracting knowledge from experience. Machine Learning algorithms extract knowledge, they cannot create it. The goal is to build programs that can make informed decisions on new unseen data.
 
 Example of application of machine learning to extract rules for a simple reflex agent:
@@ -92,6 +93,7 @@ We cannot afford to compute an exact $Q(s_t,a_t)$
     \includegraphics[scale=0.3]{../images/5/CarMountain.png}
 \end{center}
 
+What the car should do is to swing back and forth in order to achieve enough speed to climb the mountain. 
 \textbf{Action selection}\\
 At each time step, the agent must decide what action to take in step t based on its current evaluation of the expected payoff in st using a policy function. At any given point in time, a policy $\pi(s_t)$ select what actions the agent should perform. The policy defines the behavior of an agent based on its payoff evaluation. The policy can be deterministic or stochastic.
 
