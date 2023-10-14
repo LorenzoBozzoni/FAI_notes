@@ -24,6 +24,7 @@ LOOP DO
 \end{Verbatim}
 
 \subsection{Graph-search algorithm}
+Here is introduced the closed list in order to avoid visiting the same node multiple times.
 \begin{Verbatim}[numbers=left, frame=single]
 initialize the root of the tree with the initial state of problem
 initialize the closed list to the empty set
@@ -34,7 +35,8 @@ LOOP DO
     IF the node corresponds to a goal state
         THEN RETURN the corresponding solution
         ELSE IF the state corresponding to the node is not in the closed list
-        THEN add the corresponding state to the closed list expand the chosen node, adding the resulting nodes to the tree
+        THEN add the corresponding state to the closed list expand the chosen node, adding the
+        resulting nodes to the tree
 \end{Verbatim}
 
 \subsection{Evaluation of search strategies}
@@ -61,6 +63,7 @@ Example:
 \begin{center}
     \includegraphics[scale=0.4]{../images/6/BreadthFirstExample.png}
 \end{center}
+The node "2" is expanded before the node "3" so in a certain istant the frontier is: 3,4,5 as it is written also in the figure below. The node "7" is not immediately recognized as a goal, it is inserted in the frontier before. Once the goal node is reached, the path to the root is selected as solution.
 
 Breadth-first search can be implemented by considering the frontier a FIFO (First In First Out) queue. The new nodes are appended at the end of the frontier. Thus, the nodes generated first are selected first.
 \begin{center}
@@ -70,7 +73,7 @@ Breadth-first search can be implemented by considering the frontier a FIFO (Firs
 \subsubsection{Evaluation of Breadth-First Search}
 \begin{itemize}
     \item Breadth-first search is complete: assuming b is finite
-    \item Breadth-first search is optimal: it finds the shallowest solution when step costs are all equal (e.g., they are unitary). When the path cost to any node is a non-decreasing function of the depth of the node
+    \item Breadth-first search is optimal: it finds the shallowest solution when step costs are all equal (e.g., they are unitary). When the path cost to any node is a non-decreasing function of the depth of the node. The cost for the second level is greater than the first, and so on.
     \item Complexity: breadth-first search has temporal and spatial (worst-case) complexity of $O(bd+1)$ nodes. The root of the search tree generates b nodes at level 1. Each one of them generates b nodes, totaling $b^2$ nodes at level 2. Thus, at level d+1 there will be $b^{d+1} - b$ nodes
 \end{itemize}
 
@@ -78,7 +81,6 @@ Worst case of Breadth-First Search:
 \begin{center}
     \includegraphics[scale=0.4]{../images/6/WorstCaseBreadthFirst.png}
 \end{center}
-
 In breadth-first search, we can perform the goal test when a node is generated, instead of when it is selected from the frontier. This variant is still complete and optimal (when the path cost to any node is a non-decreasing function of the depth of the node). This variant has temporal and spatial (worst-case) complexity of $O(b^d)$ nodes since we avoid
 expanding a node before adding it to the frontier.
 \begin{center}
@@ -143,8 +145,7 @@ the evaluation function f(n) returns the path cost.
 \begin{itemize}
     \item Uniform-cost search is complete: assuming $b$ finite and step costs larger than a small positive $\epsilon$
     \item Uniform-cost search is optimal: uniform-cost search expands nodes in order of their optimal path costs
-    \item Complexity: Uniform-cost search has temporal and spatial worst-case complexity of $O(b^{(1+ \lfloor C^*/\epsilon \rfloor)})$ nodes, where $C^*$ is the cost of the optimal solution
-    
+    \item Complexity: Uniform-cost search has temporal and spatial worst-case complexity of $O(b^{(1+ \lfloor C^*/\epsilon \rfloor)})$ nodes, where $C^*$ is the cost of the optimal solution. The fraction at the exponent represents the depth of the tree since $\epsilon$ is very small will always be choosen by the algorithm.
 \end{itemize}
 
 \subsection{Depth-first search}
@@ -154,8 +155,7 @@ then one of its successors, and so on. Depth-first search always selects the nod
     \includegraphics[scale=0.4]{../images/6/DepthFirstSearch.png}
 \end{center}
 
-Depth-first search can be implemented by representing the frontier as a Last-In-First-Out (LIFO) queue. The generated successor nodes
-are inserted at the front of the frontier. The most recently generated nodes are selected first.
+Depth-first search can be implemented by representing the frontier as a Last-In-First-Out (LIFO) queue. Since it is a stack, it can be implemented both explicitely by a data structure or implicitely by means of recursive calls. It is like a breadth-first search with LIFO instead of FIFO. The generated successor nodes are inserted at the front of the frontier. The most recently generated nodes are selected first.
 \begin{center}
     \includegraphics[scale=0.4]{../images/6/DepthFirstExample.png}
 \end{center}
@@ -202,7 +202,7 @@ def is_cycle(node, k=30):
 \subsubsection{Evaluation of Depth-First Search}
 \begin{itemize}
     \item Depth-first search is not complete: it can follow path of infinite length
-    \item Depth-first search is not optimal: it does not find the shallowest solution
+    \item Depth-first search is not optimal: it does not find the shallowest solution, might go very deeply in a wrong direction.
     \item Complexity: given the maximum depth of the search tree $m$, depth-first has spatial (worse-case) complexity of $O(bm)$ nodes. It has temporal (worst-case) complexity of $O(b^m)$ nodes; $m$ could be infinite; $m\geq d$ (often $m \gg d$). At each step of the search, only a single path (from the root to a leaf node) must be stored
     in memory; also, the nodes not yet expanded at each level should be stored
 \end{itemize}

@@ -1,0 +1,381 @@
+\section{Informed Search Strategies}
+They exploit specific knowledge that is not contained in problem formulation. They select a node from the frontier according to an evaluation function f(n). The evaluation function f(n) provides an estimate of how much a node is “promising”. There are different ways to calculate the evaluation function, we will focus on: Greedy best-first search
+ and A* search.
+
+Conventionally, best (most promising) nodes have small values of evaluation function f(n). Informed search strategies implement the frontier as a priority queue ordered in increasing order of f(n). Thus, nodes with minimum f(n) are chosen first.
+
+\begin{center}
+    \includegraphics[scale = 0.2]{../images/7/BestFirstSearch.png}
+\end{center}
+
+
+\subsection{Best-first greedy search}
+Best-first greedy search uses an evaluation function that is equal to a heuristic function h(n). Thus, the evaluation f(n) corresponds to the heuristic function h(n) that evaluates the estimated cost of the shortest path from a node n to a goal node. To apply best-first greedy search, h(n) must be known. For example, it is sufficient to know the heuristic value for each state.
+
+\textbf{The heuristic h(n) is an estimate, not the actual cost
+If we knew the actual cost, the problem
+would have already been solved.}
+
+\subsubsection{Examples of best-first greedy search}
+Let’s consider two examples of heuristics for the 8-puzzle:
+\begin{itemize}
+    \item $h_1(n)$ is the number of misplaced tiles
+    \item $h_2(n)$ is computed as the sum of Manhattan distances of each tile to its final position (computed only considering horizontal and vertical movements) 
+\end{itemize}
+
+\begin{center}
+    \includegraphics[scale = 0.2]{../images/7/NodeNandGoal.png}
+\end{center}
+
+Considering the node N we have:
+\begin{itemize}
+    \item $h_1(n)$ = 6 because only 4 and 7 are in the right position
+    \item $h_2(n)$ = 2 (for tile 5) + 3 (for tile 8) + 0 (for tile 4)
+    + 1 (for tile 2) + 3 (for tile 1) + 0 (for tile 7)
+    + 3 (for tile 3) + 1 (for tile 6) = 13
+\end{itemize}
+
+What are the underlying intuitions behind $h_1(n)$ and $h_2(n)$?
+\begin{itemize}
+    \item $h_1(n)$: if a tile is misplaced, I will need at least one move to place it in its correct position
+    \item $h_2(n)$: i am counting how many moves each tile would require if no other tiles were placed on the board
+\end{itemize}
+$h_1(n)$ and $h_2(n)$ are defined considering simpler problems (that is, by relaxing some of the original constrains).
+
+\subsection{Heuristic function accuracy}
+Given two (consisten) heuristic funtions $h_1$ and $h_2$ such that $h_1(n) \leq h_2(n)$ fon any node $n$, $h_2$ \textbf{dominates} $h_1$ since each node expanded by $A^*$ search using $h_1$ is also expanded by $h_2$. In the 8-puzzle $h_2$ dominates $h_1$. \textbf{When $h_2$ dominates $h_1$, $h_2$ we say it is more accurate or more informed than $h_1$}.\\
+
+Best-first Greedy Tree Search python code (it still checks for cycles but has no reached table):
+\begin{Verbatim}[numbers=left, frame=single]
+def best_first_tree_search(problem, f):
+    "A version of best_first_search without the `reached` table."
+    frontier = PriorityQueue([Node(problem.initial)], key=f)
+    while frontier:
+        node = frontier.pop()
+        if problem.is_goal(node.state):
+            return node
+        for child in expand(problem, node):
+            if not is_cycle(child):
+                frontier.add(child)
+    return failure
+\end{Verbatim}
+
+
+If f(n)=g(n) then it is uninformed search algorithm since g(n) is a given data corresponding to the path cost from root to the node.\\
+
+Best-first Greedy Search python code (with reached table)
+\begin{Verbatim}[numbers=left, frame=single]
+def best_first_search(problem, f):
+    "Search nodes with minimum f(node) value first."
+    node = Node(problem.initial)
+    frontier = PriorityQueue([node], key=f)
+    reached = {problem.initial: node}
+    while frontier:
+        node = frontier.pop()
+        if problem.is_goal(node.state):
+            return node
+        for child in expand(problem, node):
+        s = child.state
+        if s not in reached or child.path_cost < reached[s].path_cost:
+            reached[s] = child
+            frontier.add(child)
+    return failure
+\end{Verbatim}
+
+\begin{multicols}{2}
+    \noindent Example of best-first greedy search using $h_1(n)$ and graph-search (because of repeated states):
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/7/BestFirstExample1.png}
+\end{center}
+Example of best-first greedy search using $h_2(n)$ and graph-search (because of repeated states)
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/7/BestFirstExample2.png}
+\end{center}
+\end{multicols}
+$h_1(n)$ estimated that we would need four moves to reach the goal
+$h_2(n)$ estimated that we needed five moves. They are both estimates, but some estimates might be more accurate than others (more later). \\
+
+Another example of best-first greedy search. In this case $h(n)$ is computed as the straight distance from the goal. We apply graph-search since we might have repeated nodes.
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/7/LocalMinimaProblem.png}
+\end{center}
+
+\subsubsection{Evaluation of Best-First Greedy Search}
+\begin{itemize}
+    \item Best-first greedy search is not complete: since it can get easily stuck in local optima (and cannot backtrack)
+    \item Best-first greedy search, in general, is not optimal: for the same reason
+    \item Complexity: it has temporal and spatial (worst-case) complexity of $O(b^m)$ nodes, $m$ is the maximum depth of the search tree (and could be infinite)
+\end{itemize}
+
+\subsection{A* search}
+The evaluation function $f(n)$ of a node $n$ is computed as the sum of two components: the cost to reach $n$ from the root $g(n)$ and an heuristic function $h(n)$.
+\[
+    f(n) = g(n) + h(n)    
+\]
+$f(n)$ estimates the cost of a solution that passes through node n:
+\begin{itemize}
+    \item $g(n)$ is the path cost from the root to $n$ (what we know for sure)
+    \item $h(n)$ estimates the cost of the shortest path from $n$ to a goal node (what we are guessing)
+\end{itemize} 
+A* Seach python code (with reached table):
+\begin{Verbatim}[numbers=left, frame=single]
+def g(n): return n.path_cost
+
+def astar_search(problem, h=None):
+    """Search nodes with minimum f(n) = g(n) + h(n)."""
+    h = h or problem.h
+    return best_first_search(problem, f=lambda n: g(n) + h(n))
+\end{Verbatim}
+We must know $h(n)$ to apply A* search. Example of A* search using graph-search. $h(n)$ is computed as the number of misplaced tiles:
+\begin{center}
+    \includegraphics[scale = 0.4]{../images/7/AStarExample.png}
+\end{center}
+
+\subsubsection{Advantages of A* search}
+Navigation example: the red square is the starting position, the green square is the goal, grey squares are obstacles. Best-first greedy search using h(n) computed as the Manhattan distance from the goal (without considering obstacles) on the right.
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.4]{../images/7/NavigationExample.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.4]{../images/7/Navigation2.png}
+    \end{center}
+\end{multicols}
+The values of the distance can be stored or computed
+on the fly depending on the problem. Best-first greedy search using h(n) computed as the Manhattan distance from the goal (without considering obstacles) on the left while on the right A* search using h(n) computed as the Manhattan distance from the goal (without considering obstacles).
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.4]{../images/7/Navigation3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.4]{../images/7/Navigation4.png}
+    \end{center}
+\end{multicols}
+By using both the cost so far g(n) and the estimate of the cost of reaching the goal h(n), A* can lead the agent away from suboptimal paths.
+
+\subsubsection{Evaluation of A* search}
+\begin{itemize}
+    \item A* search is complete and optimal for tree-search: when h(n) is admissible
+    \item A* search is complete and optimal for graph-search: when h(n) is consistent
+    \item Complexity: it has a temporal and spatial (worst-case) complexity that is exponential in the length of the solution
+\end{itemize}
+
+\subsection{Admissible heuristic functions}
+A heuristic function h(n) is admissible when, for each node $n$ 
+\[
+    0 \leq h(n) \leq h^*(n)
+\]
+where $h*(n)$ represents the actual cost from node n to the solution. When n is a goal node, h(n) should be zero. h(n) is “optimistic” since it always underestimates the true cost to reach the goal.
+
+Example
+\begin{itemize}
+    \item h(n) computed as the estimated cost of the shortest path from n to a goal node
+    \item h*(n) returning the actual cost of the shortest path from n to a goal node
+\end{itemize}
+How can I define an admissible h(n) without knowing h*(n)?\\
+
+Considering
+\begin{center}
+    \includegraphics[scale = 0.4]{../images/7/NodeNandGoal.png}
+\end{center}
+Is h1(n) admissible? (the number of misplaced tiles). Is h2(n) admissible? (the sum of Manhattan distances of each tile to its final position).\\
+
+Step cost of horizontal/vertical actions is 1 and $\sqrt{2}$ for a diagonal actions. ($x_G, y_G$) is the goal position.
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/StepCostHorVert.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/AbsoluteValue.png}
+    \end{center}
+\end{multicols}
+Why is $h_2(n)$ not admissible, when moving diagonally?
+\begin{center}
+    \includegraphics[scale = 0.4]{../images/7/Diagonal.png}
+\end{center}
+When moving diagonally, the actual $h^*(n)$ is 5.66 while $h_2(n)$ is 8 (thus, it overestimates the cost).
+How to create an admissible heuristic function?
+\textbf{An admissible heuristic can usually be seen as the cost of an optimal
+solution to a relaxed problem, obtained by removing constraints.}
+
+In the robot navigation example,
+\begin{itemize}
+    \item The Manhattan distance corresponds to the optimal solution when we remove the obstacles but keep the constraints of moving in four directions
+    \item The Euclidean distance corresponds to the optimal solution when we remove both the obstacles and allow diagonal movements
+\end{itemize}
+In the 8-puzzle,
+\begin{itemize}
+    \item $h_1(n)$ was based on removing the constraint of moving only by sliding the tiles
+    \item $h_2(n)$ considered the moves needed to position each tile as if it was alone on the board
+\end{itemize}
+
+\subsection{First optimality theorem for $A^*$ search}
+$A^*$ seach with tree-search is complete and optimal when $h(n)$ is admissible (when all step costs are larger than a small positive $\epsilon$). \\
+
+\textbf{Completeness}: if a solution exists, it will have a finite cost $C^*$. Since the step costs are at least $\epsilon$, then $g(n)$ will always increase and exceed the cost of the solution. Thus, $A^*$ will expand forever the tree. \textbf{Thus, if a solution exists, $A^*$ search terminates with the solution}.\\
+
+\textbf{Optimality}: call $C^*$ the cost of the optimal solution. Consider a sub-optimal goal node $G'$ in the frontier $f(G') = g(n) + h(n) \leq C^*$. Consider a node $n$ in the frontier, which is on the path corresponding to the optimal solution; thus, $f(n) = g(n) + h(n) \leq C^*$. From the two equations we derive that $f(n) \leq C^* \leq f(G')$ and thus the suboptimal goal $G'$ will not be chosen from the frontier. \textbf{Thus, when $A^*$ search selects a node from the frontier; the path to the corresponding state is optimal}.
+
+
+\subsection{Consistent Heuristic Functions}
+A heuristic function $h(n)$ is consistent when, for each node $n$ and each one of its successors $n'$:
+\begin{multicols}{2}
+
+    \[
+    h(n) \leq c(n,a,n') \leq h(n')    
+\]
+\vspace{1cm}
+\columnbreak
+\begin{center}
+    \includegraphics[scale = 0.4]{../images/7/TriangularInequality.png}
+\end{center}
+\end{multicols}
+
+\textbf{A consistent heuristic function is also admissible;
+vice versa is not true in general.}
+If $n$ is a goal node, then $h(n) = 0$.\\
+
+When is a heuristic function not consistent?
+\begin{multicols}{2}
+    Consider a heuristic function for which:
+\begin{itemize}
+    \item the estimated cost to the goal node from $n$ is 100
+    \item the cost of moving from $n$ to $n'$ is 10
+    \item the estimated cost to the goal node from $n'$ is 20
+\end{itemize}
+In this case, the triangular inequality does not hold:
+\[
+    h(n) \leq c(n,a,n') \leq h(n')    
+\]
+\[
+    (100 \not\leq 10 + 20)
+\]
+\columnbreak
+\begin{center}
+    \includegraphics[scale = 0.4]{../images/7/TriangularInequality2.png}
+\end{center}
+\end{multicols}
+Let’s consider two examples of heuristics for the 8-puzzle:
+\begin{itemize}
+    \item $h_1(n)$ is the number of misplaced tiles
+    \item $h_2(n)$ is computed as the sum of Manhattan distances of each tile to its final position (computed only considering horizontal and vertical movements) 
+\end{itemize}
+
+Considering the node N we have:
+\begin{itemize}
+    \item $h_1(n)$ = 6 because only 4 and 7 are in the right position
+    \item $h_2(n)$ = 2 (for tile 5) + 3 (for tile 8) + 0 (for tile 4)
+    + 1 (for tile 2) + 3 (for tile 1) + 0 (for tile 7)
+    + 3 (for tile 3) + 1 (for tile 6) = 13
+\end{itemize}
+Both heuristics are consistent. Now let's get back on the path problem with obstacles: 
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/h1Consistent.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/h2consistent.png}
+    \end{center}
+\end{multicols}
+
+\subsection{Second optimality theorem for $A^*$ search}
+$A*$ search with graph-search is complete and optimal when $h(n)$ is consistent (when all step costs are larger than a small positive $\epsilon$). \\
+
+\textbf{Completeness}: it can be proved that in the same way we did for tree search with an admissible $h(n)$.\\
+
+\textbf{Optimality}: given $n’$ successor of $n$, $f(n’) = g(n’) + h(n’) = g(n) + c(n,a,n’) + h(n’) \geq g(n) + h(n) = f(n)$. Thus, $A^*$ search chooses (and expands) nodes in non-decreasing order of $f(n)$. When $A^*$ selects a node from the frontier, the current path to the corresponding state is optima. Thus, when $A^*$ selects the first goal node from the frontier, this is the optimal solution.\\
+
+\textbf{Consistency is a stronger property than admissibility. In fact, there are more admissible than consistent functions Graph-search is more constrained since it does not consider nodes corresponding to the same state. Thus, it requires a stronger property to guarantee completeness and optimality.}
+
+\begin{center}
+    \includegraphics[scale = 0.2]{../images/7/AdmissibilityTree.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.2]{../images/7/AdmissibilityTree2.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.2]{../images/7/AdmissibilityTree3.png}
+\end{center}
+Other properties of $A^*$ search:
+\begin{itemize}
+    \item $A^*$ search expands all nodes with $f(n) < C^*$
+    \item $A^*$ search expands some nodes with $f(n) = C^*$
+    \item $A^*$ search expands no nodes with $f(n) > C^*$
+    \item $A^*$ search is \textbf{optimally efficient}: there exists no other optimal search algorithm that, for any heuristic function, expands less nodes than $A^*$ search (except some nodes with $f(n) = C^*$)
+\end{itemize}
+
+So, if we have a consistent heuristic, we are ready to apply $A^*$ search, correct?
+Not really\dots There are very dumb consistent heuristic functions
+The heuristic $h_0(n)$ that returns 0 for all nodes $n$ is
+consistent and thus admissible, but uninteresting.
+A* search with $h_0(n)$ implements uniform-cost search.
+Uniform-cost search is thus a special case of A* search.
+
+\subsection{Weighted A*}
+It introduces a weight factor $w (1 \leq w < \infty)$ over the heuristics so that, f$(n) = g(n) + w h(n)$. The theoretical properties do not apply anymore, but this extension of A* can be more efficient.
+A* search (left) compared to weighted A* search with $w = 2$ (right):
+\begin{center}
+    \includegraphics[scale = 0.2]{../images/7/WeighedAStar.png}
+\end{center}
+
+\subsection{Iterative deepening A* (IDA*) search}
+IDA* reduces memory requirement of A* search by applying a limit to the values of f(n). It assumes to have a consistent heuristic function $h(n)$.
+Iterative Deepening A* (IDA*) Search:
+\begin{Verbatim}[numbers=left, frame=single]
+cutoff = f(root-node)
+repeat
+    1. perform depth-first search by expanding all nodes n such that f(n) <= cutoff
+    2. cutoff = smallest value f() of non-expanded (leaf) nodes until 
+    (a solution is found) or (a termination condition on time or memory is met)
+\end{Verbatim}
+Example of IDA* search. 8-puzzle with $h(n)$ computed as the number of misplaced tiles and cutoff equal to 4:
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/IDA1.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/IDA2.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/IDA3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/IDA4.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/IDA5.png}
+    \end{center}
+\end{multicols}
+Cutoff set to 5:
+
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/Example1.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/Example2.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/Example3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/Example4.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/Example5.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/Example6.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/7/Example7.png}
+    \end{center}
+\end{multicols}
+
+\subsubsection{Evaluation of IDA* search}
+\begin{itemize}
+    \item Completeness: IDA* search is complete when $h(n)$ is admissible
+    \item Optimality: IDA* search is optimal when $h(n)$ is admissible
+    \item Complexity: IDA* search requires less memory than A* search and avoids to sort the frontier. However, IDA* cannot avoid to revisit states not on the current path, because it uses too little memory (it just remembers the current cutoff). Thus, it is very efficient memory-wise but not time-wise since it revisits states
+    \item Several other variants of A* search exist and are widely used
+\end{itemize}
