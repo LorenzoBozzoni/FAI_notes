@@ -1,0 +1,339 @@
+\section{Adversarial search strategies}
+Adversarial search considers multiagent
+environments in which agents compete.
+Board games are a typical scenario for
+adversarial search strategies.
+
+
+We consider games with:
+\begin{itemize}
+    \item two players
+    \item turn-taking
+    \item zero sum
+    \item perfect information
+    \item deterministic and stochastic (they include elements of chance)
+\end{itemize}
+Zero sum means that if a player wins (+1) the other player loses (-1). Thus sum, thus, is zero. Perfect information means that the agent has perfect information about the game state which is fully observable (like chess, unlike poker).
+
+Games can be formulated as search problems with an element of uncertainty due to the action (moves) of the oppponent.
+In general, there is no sequence of actions that makes a player win independently of the actions of the opponent. At each turn, a player must choose the action to play without the possibility to explore the whole state space.
+
+\subsection{Formulation of search problem for a game}
+\begin{itemize}
+    \item \textbf{Players}: two players, MAX and MIN, that take turn. MAX moves first
+    \item \textbf{Initial state}: intial set up of the game (initial configuration of the board)
+    \item \textbf{Function Actions(s)}: given a state s, returns the set of legal moves in s
+    \item \textbf{Function Result(s,a)}: defines the state resulting from taking action a in state s
+    \item \textbf{Goal test}: given a state, returns true if the game is over 
+    \item \textbf{Utility(s,p)}: returns the numerical value to player p in terminal state s (e.g., +1, 0, or -1)
+\end{itemize}
+Python formulation:
+\begin{Verbatim}[numbers=left, frame=single]
+    class Game:
+def actions(self, state):
+"""Return a collection of the allowable moves from this state."""
+raise NotImplementedError
+def result(self, state, move):
+"""Return the state that results from making a move from a state."""
+raise NotImplementedError
+def is_terminal(self, state):
+"""Return True if this is a final state for the game."""
+return not self.actions(state)
+def utility(self, state, player):
+"""Return the value of this final state to player."""
+raise NotImplementedError
+\end{Verbatim}
+
+Playing a game
+\begin{Verbatim}[numbers=left, frame=single]
+def play_game(game, strategies: dict, verbose=False):
+    """Play a turn-taking game. `strategies` is a {player_name: function} dict,
+    where function(state, game) is used to get the player's move."""
+    state = game.initial
+    while not game.is_terminal(state):
+    player = state.to_move
+    move = strategies[player](game, state)
+    state = game.result(state, move)
+    if verbose:
+    print('Player', player, 'move:', move)
+    print(state)
+    return state
+\end{Verbatim}
+\begin{center}
+    \includegraphics[scale = 0.2]{../images/8/GameTree.png}
+\end{center}
+Solving the game corresponds to finding the best action for MAX (or for MIN) in a state.
+
+\subsection{Action selection - Minimax Search}
+It considers the game from MAX’s perspective. Starting from the current state (corresponding to the root), MAX builds the game tree. The game tree can be built completely or up to a maximum depth h (which could depend on the available time to perform a move). The game tree is built using a depth-first search. MAX evaluates the leaf nodes of the game tree using Utility(s)
+or by an evaluation function e(s). MAX “backs up” the minimax values from the leaves to the root. MAX chooses the best move (the move that maximizes the minimax value).
+
+\subsection{The evaluation function: e(s)}
+When the state is not terminal, we cannot compute utility. In non-terminal state, we can compute an evaluation function e(s) that, given a state s and a
+player p, returns a real number estimating the expected utility of s to p. Evaluation function:
+\begin{itemize}
+    \item $e(s) > 0$ means that $s$ is good for MAX
+    \item $e(s) < 0$ means that $s$ is good for MIN
+    \item $e(s) = 0$ means that $s$ is neutral
+\end{itemize}
+
+\subsection{The utility function}
+The Utility function returns the numerical value to player p in terminal state s (e.g., +1, 0, or -1)
+Utility:
+\begin{itemize}
+    \item Utility$(s) > 0$ means that MAX wins
+    \item Utility$(s) < 0$ means that MIN wins
+    \item Utility$(s) = 0$ means a tie
+\end{itemize}
+
+\textbf{Convention}
+Utility(s) and e(s) return values relative to MAX. The values for MIN are obtained by taking the opposite (i.e., multiplying by -1) because the games are zero sum. Utility(s) and e(s) are positive when they are good for MAX, negative when they are good for MIN.\\
+
+\textbf{Example of evaluation function for Tic-Tac-Toe}
+e(s) is computed as the difference between:
+\begin{itemize}
+    \item The number of rows, columns and diagonals that are open for MAX and
+    \item The number of rows, columns, and diagonals open for MIN
+\end{itemize}
+e(s) could be normalized between -1 and +1 to keep values consistent with utility.
+\begin{center}
+    \includegraphics[scale = 0.4]{../images/8/ExampleEvaluationFunction.png}
+\end{center}
+
+Starting from the values assigned (by function Utility() or by the evaluation function) to the leaves and going up to the root, a minimax value is assigned to each node of the game tree. The minimax value of a node is the estimate of the expected utility for a player in the state corresponding to that node, if both players play optimally.
+The minimax value of a leaf node is equal to the value returned by:
+\begin{itemize}
+    \item The function Utility(s), if the leaf node is terminal
+    \item The evaluation function e(s), if the leaf node is not terminal
+\end{itemize}
+The minimax value of a MAX node is the maximum of the minimax values of its children. The minimax value of a MIN node is the minimum of the minimax values of its children.\\
+
+Examples of Minimax Search:
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.25]{../images/8/ExampleMinimax.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.3]{../images/8/ExampleMinimax2.png}
+    \end{center}
+\end{multicols}
+
+Minimax search python implementation:
+\begin{Verbatim}[numbers=left, frame=single]
+def minimax_search(game, state):
+    """Search game tree to determine best move; return (value, move) pair."""
+    player = state.to_move
+    def max_value(state):
+        if game.is_terminal(state):
+            return game.utility(state, player), None
+        v, move = -infinity, None
+        for a in game.actions(state):
+            v2, _ = min_value(game.result(state, a))
+            if v2 > v:
+                v, move = v2, a
+    return v, move
+
+def min_value(state):
+    if game.is_terminal(state):
+        return game.utility(state, player), None
+    v, move = +infinity, None
+    for a in game.actions(state):
+        v2, _ = max_value(game.result(state, a))
+        if v2 < v:
+            v, move = v2, a
+    return v, move
+    # the Minimax search plays for MAX
+    return max_value(state)
+\end{Verbatim}
+
+\textbf{Minimax is optimal when using the utility function (when the entire game tree is built)}. However, Minimax search builds a game tree in which
+nodes grow exponentially with the maximum depth h. Can MAX choose the optimal action without examining all the nodes in the game tree?
+
+\begin{center}
+    \includegraphics[scale = 0.25]{../images/8/TriangleTree.png}
+\end{center}
+
+\subsection{Alpha-Beta Pruning}
+Reduces the complexity of the minimax search by not considering branches of the game tree that cannot influence the final decision. Alpha-beta pruning returns the same outcome of the “vanilla” minimax search.
+Alpha-beta pruning uses two parameters $\alpha$ and $\beta$:
+\begin{itemize}
+    \item Parameter $\alpha$: it represents the value of the best move found so far for MAX (i.e. with the highest minimax value). $\alpha$ can be interpreted as "at least"
+    \item Parameter $\beta$: it represents the value of the best move found so far for MIN (i.e. with the lowest minimax value). $\beta$ can be interpreted as "at most"
+\end{itemize}
+
+\textbf{Alpha-beta pruning for Tic-Tac-Toe}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/8/AlphaBetaPruning1.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/8/ABPruning2.png}
+    \end{center}
+\end{multicols}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/8/ABPruning3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/8/ABPruning4.png}
+    \end{center}
+\end{multicols}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/ABPruning5.png}
+\end{center}
+
+Here is a sketch of the algorithm of Alpha-Beta pruning:
+\begin{enumerate}
+    \item Update the $\alpha$ and $\beta$ values as soon as possible
+    \item Interrupt the search below a MAX node when the $\alpha$ value is larger or equal to the $\beta$ value
+    \item Interrupt the search below a MIN node when the $\beta$ value is smaller or equal to the $\alpha$ value
+\end{enumerate}
+
+
+\subsubsection{Evaluation of Minimax Search and Alpha-Beta pruning}
+Given the maximum number of legal moves in a state is $b$, minimax search will expand $O(b^h)$ nodes. The efficiency of alpha-beta pruning depends on the order in which nodes are examined. In the worst case, alpha-beta pruning expands O$(b^h)$ nodes.
+
+In the best case, alpha-beta pruning expands $O(b^{h/2})$ nodes 
+\begin{itemize}
+    \item MIN nodes that are children of a MAX node should be
+    considered in increasing order of minimax values
+    \item MAX nodes that are children of a MIN node should be
+    considered in decreasing order of minimax values
+    \item This cannot be guaranteed in practice
+\end{itemize}
+
+In the average case (nodes considered in random order), alpha-beta prunig expands $O(b^{3h/4})$ nodes.\\
+
+Move ordering example:
+\begin{center}
+    \includegraphics[scale = 0.2]{../images/8/MoveOrderingExample.png}
+\end{center}
+
+
+\section{Stochastic games}
+Many games include unpredictable stochastic events, like throwing of dice in backgammon. We can apply an approach like minimax search using a game
+tree with chance nodes and expectiminimax values. 
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.2]{../images/8/BackGammon.png}
+    \end{center}
+    Black has rolled and must choose among four legal
+moves: (5-11,5-10), (5-11,19-24), (5-10,10-16), and
+(5-11,11-16), where the notation (5-11,11-16)
+means move one piece from position 5
+to 11, and then move a piece from 11 to 16.
+\end{multicols}
+A typical backgammon position. The goal of the game is to move all one’s pieces off the board. Here is a schematic game tree for a backgammon position:
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/SchematicBackgammon.png}
+\end{center}
+Stochastic games example for chance nodes with only two possible outcomes:
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Stochastic2Outcomes.png}
+\end{center}
+
+\subsection{Alpha-Beta pruning for stochastic games}
+Alpha-beta pruning can be applied to stochastic games. Consider the following game tree:
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/AlphaBetaStochastic.png}
+\end{center}
+What happens if you don’t know the range of Utility() and e()? What happens if, instead, you know the range [0, 15]?
+An order-preserving transformation of leaves values can change the best move at the root. Do values matter also in deterministic games (minimax)? Why?
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/ValuesMatterStochastic.png}
+\end{center}
+
+\section{Monte Carlo Tree Search}
+Alpha-Beta pruning is effective in many games, however it cannot play some games, like Go. Why Go is difficult?
+\begin{itemize}
+    \item Its branching factor is very large
+    \item The game comprises more than 200 moves (about 250 moves on average)
+    \item Order of magnitude greater than the branching factor of 20 for Chess
+    \item It lacks a good evaluation function
+    \item It is difficult to model, similar looking positions can have completely different outcomes
+\end{itemize}
+Alpha-beta pruning reached a proficiency level weak to intermediate.\\
+
+Monte Carlo Tree Search (MCTS) builds a “sparse” game tree to choose the best move at the root. Monte Carlo for random simulation MCTS runs random simulations and builds a search tree from the results. Markovian Decision Problem (MDP) with sequence of decisions, problem are phrased as {state, action} pairs.
+
+Monte Carlo tree search has different phases:
+\begin{enumerate}
+    \item Selection: it descends the game tree selecting successors using a selection policy until either a node with an unexpanded branch or a leaf is reached
+    \item Expansion: if the node is not a goal, the tree is expanded by generating one or more children nodes.
+    \item Simulation: a simulation (a playout or roll-out) is run from the current node to evaluate the game outcome by following a default playout policy (typically random); This results in a reward computed according to a reward function.
+    \item Backpropagation: the reward is used to update all the nodes visited during the previous steps.
+\end{enumerate}
+
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/MonteCarloPhases.png}
+\end{center}
+
+MCTS builds a “sparse” game tree by sampling the game tree focusing on the most promising paths. MCTS have more difficulty in problems in which sampling might not be effective. For example, problems with very few good moves
+with respect of the number of available ones.
+
+When does MCTS stop? It is an \textbf{anytime method}. Whenever it stops, it can provide an answer. Typically, it can be stopped when a time limit has been
+reached or a number of rollouts have been performed.
+
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step1.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step2.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step3.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step4.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step5.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step6.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step7.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step8.png}
+\end{center}
+
+How do we select the successors nodes? Selection policy should balance
+exploration and exploitation. I wish to visit nodes that promise
+the highest chance of winning. I wish to try less explored nodes to learn
+what might happen if I take those actions.
+\textbf{UCB1(n)} is a common solution to balance exploration and exploitation in MCTS.
+\[
+    UCB1(n) = \dfrac{U(n)}{N(n)} + C\cdot \sqrt{\dfrac{\log(N(Parent(n)))}{N(n)}}    
+\]
+The node with the largest UCB1(n) is selected. Where:
+\begin{itemize}
+    \item $U(n)$ is the utility of node n (number of wins)
+    \item $N(n)$ is the number of simulations involving node n
+    \item $C$ is the exploration parameter
+    \item $N(Parent(n))$ is the number of simulations involving the parent of node n
+\end{itemize}
+And, in general, the first term is the exploitation term and the second term is the exploration term. When C is infinity, then we have pure exploration. When C is zero, we have pure exploitation.
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step9.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step10.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step10bis.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step11.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step11bis.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step11tris.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/8/Step11quatris.png}
+\end{center}
+MCTS does not need an explicit evaluation function. Random playouts are enough to explore the search space. Thus, it can be employed an evaluation function, or a substantial corpus of knowledge, is unavailable.
