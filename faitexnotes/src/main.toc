@@ -66,3 +66,10 @@
 \contentsline {section}{\numberline {8}Stochastic games}{40}{section.8}%
 \contentsline {subsection}{\numberline {8.1}Alpha-Beta pruning for stochastic games}{41}{subsection.8.1}%
 \contentsline {section}{\numberline {9}Monte Carlo Tree Search}{41}{section.9}%
+\contentsline {section}{\numberline {10}Adversarial search and Machine Learning}{47}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Beyond alpha-beta pruning}{47}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Alpha zero}{48}{subsection.10.2}%
+\contentsline {subsubsection}{\numberline {10.2.1}Approach \#1}{48}{subsubsection.10.2.1}%
+\contentsline {subsubsection}{\numberline {10.2.2}Approach \#2}{49}{subsubsection.10.2.2}%
+\contentsline {subsubsection}{\numberline {10.2.3}Approach \#3}{49}{subsubsection.10.2.3}%
+\contentsline {subsubsection}{\numberline {10.2.4}Approach \#4}{51}{subsubsection.10.2.4}%

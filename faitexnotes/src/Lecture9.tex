@@ -1,0 +1,216 @@
+\section{Adversarial search and Machine Learning}
+Alpha-beta pruning improves minimax by reducing the number of visited states. Some Basic Statistics - Tic-Tac-Toe First Move:
+\begin{multicols}{2}
+    \begin{itemize}
+\item Minimax Search
+    \begin{itemize}
+        \item \# visited states = 255168
+        \item \# distinct states = 958 (0.4\%)
+        \item 100 matches take 54.9 s
+    \end{itemize}
+\item Minimax Search with Repeated States
+    \begin{itemize}
+        \item \# visited states = 958
+        \item \# distinct states = 958
+        \item 100 matches take 5.51 s
+    \end{itemize}
+\item Alpha-Beta Pruning
+\begin{itemize}
+        \item \# visited states = 9221
+        \item \# distinct states = 662 (7.2\%)
+        \item 100 matches take 4.46 s
+    \end{itemize}
+\item Alpha-Beta Pruning with Repeated States
+\begin{itemize}
+        \item \# visited states = 626
+        \item \# distinct states = 626
+        \item 100 matches take 2.35 s
+    \end{itemize}
+\end{itemize}
+\end{multicols}
+
+\subsection{Beyond alpha-beta pruning}
+Alpha-Beta pruning is effective in many games; however, it cannot play game with large state spaces and very large branching factors like for example Go. Why Go is difficult? Its branching factor is very large, the game comprises more than 200 moves (about 250 moves on average), order of magnitude greater than the branching factor of 20 for Chess, it lacks a good evaluation function, it is difficult to model, similar looking positions can have completely different outcomes. Alpha-beta pruning reached a proficiency level weak to intermediate.
+
+We can stop search at a given depth, but an adequate evaluation function becomes mandatory. That we cannot create unless we know the problem well.
+What could we do if we do not know the domain that well?
+
+We could simulate how the match will develop after I perform a given action.
+\begin{center}
+    \includegraphics[scale=0.3]{../images/9/10000Simulations.png}
+\end{center}
+
+Monte Carlo Tree Search develops an asymmetric game
+tree while evaluating states using random simulations
+Simulations are run incrementally, one after the other,
+while deeper nodes are added to the tree.
+
+The more complex the game, the more simulations we need and\dots The more expensive the simulation becomes. 
+Here is the algorithm of MCTS:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/9/MonteCarloTreeSeachAlg.png}
+\end{center}
+Example of tree:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/9/MCTS_Graph.png}
+\end{center}
+
+\subsection{Alpha zero}
+Learns from scratch by self-play reinforcement learning. It uses only the board as input features. It use a single neural network to evaluate positions and sample moves (compute their probabilities).
+
+Deep neural network $f_\theta$ with parameters $\theta$ that takes as input a raw board representation $s$ and its history and produces as output:
+\begin{itemize}
+    \item the vector of move probabilities $p$ for each action such that $p_a = Pr(a|s)$
+    \item a scalar value $v$ estimating the probability of the current player winning from position $s$
+    \item $f_\theta(s) = (p,v)$
+\end{itemize}
+
+The neural network is trained from games of self-play using reinforcement learning. In each position $s$, an MCTS search is executed, guided by the neural network $f_\theta$. The MCTS search outputs probabilities $\pi$ of playing each move. These search probabilities usually select much stronger moves than the raw neural network probabilities $p$ computed by $f_\theta$.
+MCTS can be viewed as a powerful policy improvement operator.\\
+
+It is based on a new reinforcement learning algorithm
+with lookahead search inside the training loop.
+\begin{center}
+    \includegraphics[scale=0.3]{../images/9/GoWithoutKnowledge.png}
+\end{center}
+
+Now let's go back to the beginning: we want to develop an artificial player for a game, let's say tic-tac-toe. What are out options?
+We can implement a player using
+
+\subsubsection{Approach \#1}
+We can implement a player using what we know about the game. Here is the sketch of pseudo-code for a tic-tac-toe player: 
+\begin{itemize}
+    \item if there is a winning position, take it and win
+    \item if there is a loosing position, block it
+    \item select the best position, considering that:
+    \begin{itemize}
+        \item the center is the best
+        \item next most important positions are the corners near one of our pieces
+        \item finally, choose one of the side positions
+    \end{itemize}
+\end{itemize}
+What are the limitations of this approach?
+\begin{enumerate}
+    \item We need to be proficient in the game
+    \item We do not have a general strategy to explore the variety of situations that might occur
+    \item In fact, we cannot be sure that we considered all the possibilities
+    \item We have to start from scratch if we consider a new game
+\end{enumerate}
+We can have games with very similar rules
+that require very different playing strategies
+
+
+\subsubsection{Approach \#2}
+What do we do as players? We usually simulate what might happen ahead.
+Suppose they teach you to play a new game, something completely different from what you played so far\dots
+Here is a naive human player approach:
+\begin{itemize}
+    \item Consider the current state of the game and the moves I can do
+    \item If I do move X what will the opponent do?
+    \item If I am not proficient, I am forced to consider all options and possible match developments
+    \item How much look ahead can I do? One-step ahead? Two steps? How many options can I evaluate?
+    \item If I am very good, I might be able to simulate all the possibilities
+\end{itemize}
+This is exactly what minimax using a utility function does. Is minimax good?
+\begin{itemize}
+    \item Pros:
+    \begin{itemize}
+        \item It provides a general strategy to check moves and situations (it is optimal)
+        \item We can use it with any game, we are just using knowledge about the available moves and
+        the terminal condition
+        \item We do not need to be proficient in the game or previous experience
+    \end{itemize}
+    \item Cons:
+    \begin{itemize}
+        \item When applying minimax search using utility (not an evaluation function)
+        we explore all the possible matches
+        \item This is ok for tic-tac-toe but not for more complex games like chess
+        \item But even simpler games can become infeasible for plain minimax using utility experience
+    \end{itemize}
+\end{itemize}
+We can improve it by avoiding exploring situations that we know will lead to worse solutions. This is exactly what alpha-beta pruning
+using a utility function does.
+
+\subsubsection{Approach \#3}
+All the previous approaches only use the game rules and no additional domain knowledge. We could add it by introducing an evaluation function. But before we do that, we will try other approaches that do not need domain knowledge.\\
+
+We assume that the agent must learn how to play first (X). The state $s_t$ is represented by the current board. The agent has potentially 9 possible actions corresponding to the 9 positions. The agents receives a reward of 1 if it wins, -1 if it looses and 0 if it draws. The other parameters are:
+\begin{itemize}
+    \item the learning rate $\beta$
+    \item the discount factor $\gamma$
+    \item the value $q_0$ to initialize the Q-table
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/9/RL_TicTacToe.png}
+\end{center}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.25]{../images/9/TTT_Boh.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.25]{../images/9/Environment.png}
+    \end{center}
+\end{multicols}
+How do we track performance? Who is playing the opponent?\\
+
+\textbf{Option \#1 - Minimax, the optimal one}\\
+Player \#1 (Minimax) vs. Player \#2 (Q-learning)\\
+Minimax is deterministic. It always returns the optimal move. How is it to learn from such an opponent?
+\begin{center}
+    \includegraphics[scale=0.25]{../images/9/MinimaxVsTabular.png}
+\end{center}
+
+
+
+\textbf{Option \#2 - "random" Minimax}\\
+Player \#1 (RndMinimax) vs. Player \#2 (Q-learning)\\
+It works like Minimax and when there are more moves with
+utility 1 for a given position it randomly chose between them. RndMinimax still returns an optimal move. However, it is stochastic since O selects an optimal action randomly among the available ones. Thus, the same state (board), and the same action by X, might return a different next state (board), since O is selecting an action randomly. How is it to learn from such an opponent?
+\begin{center}
+    \includegraphics[scale=0.25]{../images/9/RandomMinimaxVsTabular.png}
+\end{center}
+
+\textbf{Option \#3 - Tabular Q-learning}\\
+Player \#1 (Q-learning) vs. Player \#2 (Q-learning)\\
+Both players are trying to learn how to play. They are learning different roles, one as the starting player, one as the second player. Initially they don’t know anything, will they be able to learn how to play?
+\begin{center}
+    \includegraphics[scale=0.25]{../images/9/TabularVsTabular.png}
+\end{center}
+
+
+\textbf{Option \#4 - Random player}\\
+Player \#1 (Random player) vs. Player \#2 (Q-learning)\\
+We are learning to play against an opponent that does not anything about playing. It is stochastic since O selects actions randomly among the available ones. How is it to learn from such an opponent?
+\begin{center}
+    \includegraphics[scale=0.25]{../images/9/RandomPlayerVsTabular.png}
+\end{center}
+
+\textbf{Some Thoughts about Minimax and Tabular Q-learning}\\
+Like Minimax and Alpha-beta pruning, tabular Q-learning is feasible for small number of states. Minimax explores the entire game tree which is infeasible even for Connect-4. Alpha-beta pruning explores only the relevant part of the game tree. Tabular Q-learning needs to store the Q values for every state-action pair. Minimax/Alpha-beta pruning assume that the opponent plays optimally. If it does not, they can exploit its weaknesses (minimax values should be interpreted as “at least”). Minimax/Alpha-beta pruning play optimally right from the start while Q-learning needs to be trained and its performance is influence by the opponents used for training Q-learning must be trained against an opponent whose quality can affect the learning process
+However, it can learn an optimal strategy against any opponent, even a random one.
+
+\subsubsection{Approach \#4}
+The Q-table can be viewed as a function mapping state-action pairs into q-values. We can use a deep neural network
+to approximate the Q-table. There is a caveat though, we are simultaneously learning both the q-values and how to approximate them.
+Q-learning implemented using deep neural networks (green when playing first, blue when playing second) vs a random player (draws are reported in red):
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.35]{../images/9/QPlayingFirst.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.35]{../images/9/QPlayingSecond.png}
+    \end{center}
+\end{multicols}
+Q-learning implemented using deep neural networks (green when playing first, blue when playing second) vs a random minimax (draws are reported in red):
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.35]{../images/9/QWithNNPlayingFirst.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.35]{../images/9/QWithNNPlayingSecond.png}
+    \end{center}
+\end{multicols}
+Is there anything else we can do without using any domain knowledge? We can use simulations to assess the state values and apply MCTS.
+
+
+
