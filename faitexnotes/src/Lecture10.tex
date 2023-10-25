@@ -1,0 +1,254 @@
+\section{Constraint Satisfaction Problems: Formulation and Solving}
+Let's start from the search trees. We have seen that the search trees are composed by nodes. Each node corresponds to a path from the initial state to a state in the state space. Each state of the space state can correspond to multiple nodes, when a state can be reached, from the initial state, following multiple paths. 
+
+But, considering the implementation we have made of the node, we can easily see that the state of a node is written in a very generic manner. \textbf{ We have not specified any structure for it so the states can be anything. Plain search algorithms only compare states using = and $\neq$.}\\
+
+What we want to do now is to specialize the representation of the states in a search problem. Now it rises a new tradeoff:
+\[
+    \text{expressiveness} \leftrightarrow \text{efficiency}    
+\]
+When the structure of the state is fixed, more efficient solving techniques could be developed. In constraint satisfaction problems, the state has a \textbf{factored representation}, namely it is represented as a set of pairs variable - value. 
+
+\subsection{8-queens problem}
+We consider once again this problem in which your goal is to position 8 queens on a chessboard so that no queen can attack any other queen. A naive formulation is:
+\begin{itemize}
+    \item Initial state: empty board
+    \item Actions(): add a queen to an empty cell
+    \item Result(): \dots
+    \item Goal test: 8 queens that do not attack each other
+    \item Step cost: 1
+\end{itemize}
+A more efficient formulation is:
+\begin{itemize}
+    \item Place a queen on a cell
+    \item Do not consider attacked cells
+    \item Coun the number of cells that are not attacked in each row and column
+    \item Place a queen in the cell corresponding to the row and column with the smallest number
+    \item Do not consider attacked cells
+    \item Repeat \dots
+\end{itemize}
+\begin{multicols}{4}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/10/QP2.png}
+        \includegraphics[scale=0.3]{../images/10/QP6.png}
+        \includegraphics[scale=0.3]{../images/10/QP3.png}
+        \includegraphics[scale=0.3]{../images/10/QP7.png}
+        \includegraphics[scale=0.3]{../images/10/QP4.png}
+        \includegraphics[scale=0.3]{../images/10/QP8.png}
+        \includegraphics[scale=0.3]{../images/10/QP5.png}
+        \includegraphics[scale=0.3]{../images/10/QP9.png}
+    \end{center}
+\end{multicols}
+
+\textbf{What can an efficient formulation provide?} Empowering function Actions() and goal test, "propagate the constraints" in order to limit the actions applicable in a state and identifying failures as soon as possible (failure test).
+
+\subsection{Constraint Satisfaction Problems (CSPs)}
+They are defined as follows:
+\begin{itemize}
+    \item Set of \textbf{variables}: $\{X_1, \dots, X_n\}$
+    \item \textbf{Domains}: $D_1, \dots, D_n$ of possible values for each variable
+    \item Set of \textbf{Constraints}: $\{C_1, \dots, C_p\}$. Each constraint involves a subset of variables and specifies the valid (or invalid) combinations of their values
+\end{itemize}
+The goal is to assign a value to each variable in such a way that all the constraints are satisfied. \textbf{Solution}: \textbf{complete} (all variables are assigned a value) and \textbf{consistent} (all constraints are
+satisfied) assignments.
+
+\noindent\textbf{Example: Map Coloring}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/10/MapColoring.png}
+    \end{center}
+    \begin{itemize}
+        \item 7 variables: $\{WA, NT, Q, NSW, V, SA, T\}$
+        \item Each variable has the same domain: $D_i = \{red, green, blue\}$
+        \item Variables corresponding to adjacent regions cannot have the same color: $WA \neq NT, WA \neq SA, NT \neq SA, NT \neq Q, SA \neq Q, SA \neq NSW, SA \neq V, Q \neq NSW, NSW \neq V$
+    \end{itemize}
+\end{multicols}
+
+\noindent\textbf{Example: 8-queens}
+\begin{itemize}
+    \item 8 variables $X_i, i = 1, 2, \dots, 8$, each one representing the row of the queen on the column $i$ (or vice versa)
+    \item Each variable has the same domain $D_i = \{1, 2, \dots, 8\}$
+    \item Constraints are of the form:
+    \begin{itemize}
+        \item no two queens on the same row: $X_i \neq X_j, i,j = 1,2, \dots, 8, i \neq j$
+        \item no two queens on the same diagonal: $|X_i - X_j| \neq |i - j|, i,j = 1,2, \dots, 8, i \neq j$
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Example: Zebra puzzle}
+There are five houses.
+\begin{multicols}{2}
+    \begin{itemize}
+        \item The Englishman lives in the red house
+        \item The Spaniard owns the dog
+        \item Coffee is drunk in the green house
+        \item The Ukrainian drinks tea
+        \item The green house is immediately to the right of the ivory house
+        \item The Old Gold smoker owns snails
+        \item Kools are smoked in the yellow house
+        \item Milk is drunk in the middle house
+        \item The Norwegian lives in the first house
+        \item The man who smokes Chesterfields lives in the house next to the man with the fox
+        \item Kools are smoked in the house next to the house where the horse is kept
+        \item The Lucky Strike smoker drinks orange juice
+        \item The Japanese smokes Parliaments
+        \item The Norwegian lives next to the blue house
+    \end{itemize}
+\end{multicols}
+Who drinks water? Who owns the zebra?\\
+\begin{itemize}
+    \item 5 variables, the "houses"
+    \item Each variable is a vector of 5 values: nationality, color, beverages, cigarettes, animals
+    \begin{itemize}
+        \item $N_i = \{\text{Englishman, Spanish, Ukrainian, Japanese, Norwegian}\}$
+        \item $C_i = \{\text{red, green, ivory, yellow, blue}\}$
+        \item $B_i = \{\text{coffee, tea, milk, orange juice, water}\}$
+        \item $S_i = \{\text{Old Gold, Kools, Chesterfields, Lucky Strike, Parliaments}\}$
+        \item $A_i = \{\text{dog, snalis, fox, horse, zebra}\}$
+    \end{itemize}
+    \item Constraints:
+    \begin{itemize}
+        \item The nationality of a house is different from the nationality of the other houses $\rightarrow$ if $X_i = [v, \dots]$ then $X_j = [v', \dots]$ with $v \neq v'$ for all $j \neq i$
+        \item The color of a house is different from the color of the other houses
+        \item \dots
+        \item The Englishman lives in the red house $\rightarrow$ if $X_i = [\text{Englishman}, \dots]$ then $X_i = [\text{Englishman}, \text{red}, \dots]$
+        \item The Norwegian lives in the first house $\rightarrow$ $X_1 = [\text{Norwegian}, \dots]$
+        \item \dots
+    \end{itemize}
+\end{itemize}
+
+\subsection{Assignments}
+Consider $n$ variables: $X_1, X_2, \dots, X_n$. 
+
+Definition of \textbf{consistent assignment}: $\{X_{i1} \leftarrow v_{i1}, X_{i2} \leftarrow v_{i2}, \dots, X_{ik} \leftarrow v_{ik}\}$ with $0 \leq k \leq n$ such that values $v_{i1}, v_{i2}, \dots, v_{ik}$ satisfy all constraints involving variables $X_{i1}, X_{i2}, \dots, X_{ik}$.\\
+
+Definition of \textbf{complete assignment}: $\{X_{i1} \leftarrow v_{i1}, X_{i2} \leftarrow v_{i2}, \dots, X_{ik} \leftarrow v_{ik}\}$ with $k = n$.\\
+
+If the domains of the variables have size $d$, there are $O(d^n)$ complete assignments.
+
+
+\subsection{Binary constraints}
+We usually consider binary constraints, namely with constraints involving two variables. Any generic CSP can be transformed in a CSP with only binary constraints. The structure of a CSP with binary constraints is represented by a constraint graph.
+\begin{center}
+    \includegraphics[scale = 0.4]{../images/10/Australia.png}
+\end{center}
+
+\textbf{Example - Binary constraints}
+Oridinal problem: $X = \{x,y,z\}$, $D = \{D_y = \{1,2\}, D_x = \{3,4\}, D_z = \{5,6\}\}$, $C = \{C_1 = [x + y = z]\}$. Constraint $C_1$ is not binary $\rightarrow$ binarization.
+\textbf{Goal}: formulate a new problem equivalent to the original one but with only binary constraints. Hint: introduce a new variable with a complex domain\dots 
+
+Introduce a new variable $u$ whose domain is the Cartesian product of the domains of the variables involved in $C_1$: $D_u = \{(1,3,5),(1,3,6),(1,4,5),(1,4,6),(2,3,5),(2,3,6),(2,4,5),(2,4,6)\}$. Reduce $D_u$ keeping only the valid combinations according to $C_1$: $D_u = \{(1,4,5),(2,3,5),(2,4,6)\}$ ("$u$ encapsulates $C_1$"). Add consistency constraints: $u[1] = x, u[2] = y, u[3] = z$.
+
+Implementation of CSP:
+\begin{Verbatim}[frame = single, numbers = left, fontsize=\small]
+class CSP(search.Problem):
+    """This class describes finite-domain Constraint Satisfaction Problems.
+    A CSP is specified by the following inputs:
+        variables A list of variables; each is atomic (e.g. int or string).
+        domains A dict of {var:[possible_value, ...]} entries.
+        neighbors A dict of {var:[var,...]} that for each variable lists
+            the other variables that participate in constraints.
+        constraints A function f(A, a, B, b) that returns true if neighbors
+            A, B satisfy the constraint when they have values A=a, B=b
+
+    def MapColoringCSP(colors, neighbors):
+        """Make a CSP for the problem of coloring a map with different colors
+        for any two adjacent regions. Arguments are a list of colors, and a
+        dict of {region: [neighbor,...]} entries. This dict may also be
+        specified as a string of the form defined by parse_neighbors."""
+        if isinstance(neighbors, str):
+            neighbors = parse_neighbors(neighbors)
+        return CSP(list(neighbors.keys()), UniversalDict(colors), neighbors, different_values_constraint)
+
+    Australia_csp = MapColoringCSP(list('RGB'), """SA: WA NT Q NSW V; NT: WA Q; NSW: Q V; T: """)
+\end{Verbatim}
+
+\subsection{CSPs as search problems}
+\begin{itemize}
+    \item States: consistent assignments
+    \item Initial state: empty assignment $\{\}$, namely $k = 0$
+    \item Actions($\{X_{i1} \leftarrow v_{i1}, X_{i2} \leftarrow v_{i2}, \dots, X_{ik} \leftarrow v_{ik}\}$): all possible consistent assignment for $X_{ik + 1}$
+    \item Result($\{X_{i1} \leftarrow v_{i1}, X_{i2} \leftarrow v_{i2}, \dots, X_{ik} \leftarrow v_{ik}\}$, $X_{ik + 1} \leftarrow v_{ik + 1}$) = $\{X_{i1} \leftarrow v_{i1}, X_{i2} \leftarrow v_{i2}, \dots, X_{ik} \leftarrow v_{ik}, X_{ik + 1} \leftarrow v_{ik + 1}\}$
+    \item Goal test: $k = n$
+    \item Step cost: unitary
+\end{itemize}
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/10/CspAsSearchProbl.png}
+\end{center}
+$r = n - k$ variables that are not yet assigned with $d$ values $\rightarrow$ branching factor $r \times d$.
+
+\subsubsection{Commutativity}
+The order in which values are assigned to the variables has no impact on the possibility of reaching consistent and complete assignments. Expand a node N by choosing one variable $X$ not included in the assignment associated to N
+and by assigning it a value from its domain (the new assignment must be consistent) $\rightarrow$ reduce branching factor.\\
+
+\noindent\textbf{Example - Commutativity}
+Consider 4 variables $X_1, X_2, X_3, X_4$. Consider a node N with (consistent) assignment $\{X_1 \leftarrow v_1, X_2 \leftarrow v_2\}$. Consider, for instance, variable $X_4$ with domain $\{v_{4,1}, v_{4,2}, v_{4,3}\}$. Successors of N are all the nodes with consistent assignments: 
+\begin{itemize}
+    \item $\{X_1 \leftarrow v_1, X_2 \leftarrow v_2, X_4 \leftarrow v_{4,1}\}$
+    \item $\{X_1 \leftarrow v_1, X_2 \leftarrow v_2, X_4 \leftarrow v_{4,2}\}$
+    \item $\{X_1 \leftarrow v_1, X_2 \leftarrow v_2, X_4 \leftarrow v_{4,3}\}$
+\end{itemize} 
+\begin{center}
+    \includegraphics[scale = 0.3]{../images/10/Commutativity.png}
+\end{center}
+The order in which values are assigned to the variables has no impact on the possibility of reaching consistent and complete assignments. 
+\begin{enumerate}
+    \item Expand a node N by choosing one variable $X$ not included in the assignment associated to N and by assigning it a value from its domain (the new assignment must be consistent) $\rightarrow$ reduce branching factor
+    \item The path for reaching a node is not relevant and \textbf{all solutions are at depth $n$ $\rightarrow$ depth-first search with backtracking}
+\end{enumerate}
+
+\subsubsection{Backatracking: consider a single value}
+Example with 3 variables: ($x_1, x_2, x_3$) and domains: $D_1 = \{v_{11}, v_{12}, \dots\}$, $D_2 = \{v_{21}, \dots\}$, $D_3 = \{v_{31}, v_{32}\}$.
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale = 0.25]{../images/10/B1.png}
+        \includegraphics[scale = 0.25]{../images/10/B2.png}
+        \includegraphics[scale = 0.25]{../images/10/B3.png}
+        \includegraphics[scale = 0.25]{../images/10/B4.png}
+        \includegraphics[scale = 0.25]{../images/10/B5.png}
+        \includegraphics[scale = 0.25]{../images/10/B6.png}
+        \includegraphics[scale = 0.25]{../images/10/B7.png}
+        \includegraphics[scale = 0.25]{../images/10/B8.png}
+        \includegraphics[scale = 0.25]{../images/10/B9.png}
+        \includegraphics[scale = 0.25]{../images/10/B10.png}
+        \includegraphics[scale = 0.25]{../images/10/B11.png}
+        \includegraphics[scale = 0.25]{../images/10/B12.png}
+    \end{center}    
+\end{multicols}
+Here is the backtracking algorithm:
+\begin{Verbatim}[frame = single, numbers = left, fontsize=\small]
+CSP-BACKTRACKING(A)
+    IF assignment A is complete, THEN RETURN A
+    X ← choose a variable not in A
+    D ← choose an order of values in the domain of X
+    FOR EACH v in D DO
+        add (X ← v) to A
+        IF A is consistent THEN
+            result ← CSP-BACKTRACKING(A)
+        IF result != failure, THEN RETURN result
+            remove (X ← v) from A
+    RETURN failure
+    
+    
+def backtracking_search(csp,select_unassigned_variable=first_unassigned_variable,
+order_domain_values=unordered_domain_values, inference=no_inference):
+    def backtrack(assignment):
+        if len(assignment) == len(csp.variables):
+            return assignment
+        var = select_unassigned_variable(assignment, csp)
+        for value in order_domain_values(var, assignment, csp):
+            if 0 == csp.nconflicts(var, value, assignment):
+                csp.assign(var, value, assignment)
+                removals = csp.suppose(var, value)
+                if inference(csp, var, value, assignment, removals):
+                    result = backtrack(assignment)
+                    if result is not None:
+                        return result
+                csp.restore(removals)
+        csp.unassign(var, assignment)
+        return None
+
+    result = backtrack({})
+    assert result is None or csp.goal_test(result)
+    return result
+\end{Verbatim}
