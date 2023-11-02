@@ -1,0 +1,403 @@
+\section{Constraint Satisfaction Problems: Heuristics and Optimization}
+Let's start considering the backtracking algorithm:
+\begin{Verbatim}[frame = single, numbers = left, fontsize=\small]
+CSP-BACKTRACKING(A)
+    IF assignment A is complete, THEN RETURN A
+    X ← choose a variable not in A
+    D ← choose an order of values in the domain of X
+    FOR EACH v in D DO
+        add (X ← v) to A
+        IF A is consistent THEN
+            result ← CSP-BACKTRACKING(A)
+            IF result != failure, THEN RETURN result
+        remove (X ← v) from A
+    RETURN failure
+\end{Verbatim}
+Regarding the forward checking: assigning value 5 to $X_1$ reduces the domains of $X_2, X_3, \dots, X_8$.
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/ForwardChecking.png}
+\end{center}
+Consider now the map coloring problem:
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/11/MC1.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/11/MC2.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/11/MC3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/11/MC4.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/11/MC5.png}
+    \end{center}
+\end{multicols}
+When $X \leftarrow v$ is added to an assignment A:
+\begin{Verbatim}[frame = single, numbers = left, fontsize=\small]
+    FOR EACH variable Y not in A DO
+FOR EACH constraint C that involves Y and X DO
+eliminate from the domain of Y all the values that do not satisfy C (given A)
+\end{Verbatim}
+Python implementation:
+\begin{Verbatim}[frame = single, numbers = left, fontsize=\small]
+def forward_checking(csp, var, value, assignment, removals):
+    """Prune neighbor values inconsistent with var=value."""
+    csp.support_pruning()
+    for B in csp.neighbors[var]:
+        if B not in assignment:
+            for b in csp.curr_domains[B][:]:
+                if not csp.constraints(var, value, B, b):
+                    csp.prune(B, b, removals)
+            if not csp.curr_domains[B]:
+        return False
+    return True
+\end{Verbatim}
+Here is the modified backtracking algorithm:
+\begin{Verbatim}[frame = single, numbers = left, fontsize=\small]
+CSP-BACKTRACKING(A, var-domains)
+IF assignment A is complete, THEN RETURN A
+X ← choose a variable not in A
+D ← choose an order of values in the domain of X
+FOR EACH v in D DO
+add (X ← v) to A
+var-domains ← FORWARD-CHECKING(var-domains, X, v, A)
+IF no variable has an empty domain THEN
+result ← CSP-BACKTRACKING(A, var-domains)
+IF result != failure, THEN RETURN result
+remove (X ← v) from A
+RETURN failure
+\end{Verbatim}
+Which variable X should be assigned next? The current assignment could not bring to any solution, but we might need time to discover this. Choose the right variable in order to discover inconsistencies in the current assignment as soon as possible. In what order should the values of X be considered? The current assignment could bring to a solution (could be parto of a solution). Choose the right value to assign to X in order to reach a solution as quickly as possible.
+
+These aspects are domain-independent and made possibile by the factored
+representation of the state. \\
+
+To answer the previous questions: 
+\begin{itemize}
+    \item Which variable X should be assigned next? \textbf{Minimum-Remaining-Values (MRV) heuristic and Degree heuristic}
+    \item In what order should the values of X be considered?
+    \textbf{Least-constraining-value heuristic}
+\end{itemize}
+
+\subsection{MRV heuristic}
+Also called most-constrained-variable heuristic. Choose the variable with the fewest legal values remaining in its domain (after application of forward checking).
+
+For example, in the 8 queens problem:
+\begin{multicols}{2}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/8QFC.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/8QFC2.png}
+\end{center}
+\end{multicols}
+
+\subsection{Degree heuristic}
+Choose the variable that is involved in the largest number of constraints with unassigned variables. Used to break ties of the MRV heuristic.
+Consider the map coloring problem:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/BlueSA.png}
+\end{center}
+The variable chosen first is SA because all the variables have domains composed of 3 values, but SA is involved in the largest number (5) of constraints with variables not yet assigned. 
+
+\subsection{Least-constraining-value heuristic}
+Choose the value that gives "more freedom" to the variables that are not yet assigned. Again, considering the map coloring problem:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/SAWithoutDomain.png}
+\end{center}
+Q has two values in its domain: red and blue. Assigning blue to Q leaves 0 values for SA, while assigning red to Q leaves 1 value for SA so the least-constraining-value heuristic assignes red to Q.
+
+Using the constraints to reduce the number of
+legal values for a variable, which in turn can
+reduce the legal values for another variable. Forward checking is a very simple form of \textbf{constraint propagation}.\\
+
+
+Can we do better than what we have seen until now?\\
+The answer is obviously yes, indeed:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/IncosistencyNotDetected.png}
+\end{center}
+
+\subsection{Arc consistency}
+Applicable to CSPs with binary constraints (constraints that involve just two variables). Assume to have a directed constraint graph. Remove from the domain of X the values that are inconsistent with the values in the
+domain of Y.
+
+\begin{Verbatim}[frame=single, numbers=left,fontsize=\small]
+    REMOVE-VALUES(X,Y) [consider the directed arc from X to Y]
+removed ← false
+FOR EACH value v in the domain of X DO
+IF there is no value u in the domain of Y such that the constraints between X and Y is satisfied
+THEN remove v from the domain of X
+removed ← true
+RETURN removed
+\end{Verbatim}
+
+\subsection{AC-3 algorithm}
+\begin{Verbatim}[frame=single, numbers=left,fontsize=\small]
+initialize a queue Q with all the constraints (X,Y) and (Y,X)
+WHILE Q is not empty DO
+(X,Y) ← remove from Q
+IF REMOVE-VALUES(X,Y) THEN
+IF the domain of X is empty THEN RETURN failure
+insert all (Z,X) in Q (if they are not yet in Q, do not insert (Y,X))
+\end{Verbatim}
+Actual python implementation:
+\begin{Verbatim}[frame=single, numbers=left,fontsize=\small]
+    def AC3(csp, queue=None, removals=None, arc_heuristic=dom_j_up):
+    if queue is None:
+    queue = {(Xi, Xk) for Xi in csp.variables for Xk in csp.neighbors[Xi]}
+    csp.support_pruning()
+    queue = arc_heuristic(csp, queue)
+    while queue:
+    (Xi, Xj) = queue.pop()
+    if revise(csp, Xi, Xj, removals):
+    if not csp.curr_domains[Xi]:
+    return False
+    for Xk in csp.neighbors[Xi]:
+    if Xk != Xj:
+    queue.add((Xk, Xi))
+    return True
+\end{Verbatim}
+
+\subsubsection{Temporal complexity analysis}
+\begin{Verbatim}[frame=single, numbers=left,fontsize=\small]
+    Forward checking
+    When (X ← v) is added to an assignment A:
+    FOR EACH variable Y not in A DO
+    FOR EACH constraint C that involves Y and X DO
+    eliminate from the domain of Y all the values that do not satisfy C (given A)
+\end{Verbatim}
+Given: 
+\begin{itemize}
+    \item $n$: number of variables:
+    \item $s$: largest number of constraints that involve any given variable ($s \leq n -1$)
+    \item $d$: size of domains
+\end{itemize}
+You have:
+\[
+    O(n \times s \times d)
+\]
+\begin{Verbatim}[frame=single, numbers=left,fontsize=\small]
+    AC-3
+    initialize a queue Q with all the constraints (X,Y) and (Y,X)
+    WHILE Q is not empty DO
+    (X,Y) ← remove from Q
+    IF REMOVE-VALUES(X,Y) THEN
+    IF the domain of X is empty THEN RETURN failure
+    insert all (Z,X) in Q (if they are not yet in Q, do not insert (Y,X))   
+\end{Verbatim}
+Each arc is inserted in Q at most $d$ times. REMOVE-VALUES has temporal complexity $O(d^2)$. AC-3 has complexity 
+\[
+    O(n \times d \times s \times d^2) = O(n \times s \times d^3)
+\]
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/AC3MorePowerful.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/AC3.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/AC3Last.png}
+\end{center}
+Modified backtracking algorithm:
+\begin{Verbatim}[frame=single, numbers=left,fontsize=\small]
+    IF assignment A is complete, THEN RETURN A
+    run AC-3 and reduce var-domains of unassigned variables
+    IF a variable has an empty dosmain THEN RETURN failure
+    X ← choose a variable not in A
+    D ← choose an order of values in the domain of X
+    FOR EACH v in D DO
+    add (X ← v) to A
+    var-domains ← FORWARD-CHECKING(var-domains, X, v, A)
+    IF no variable has an empty domain THEN
+    result ← CSP-BACKTRACKING(A, var-domains)
+    IF result != failure, THEN RETURN result
+    remove (X ← v) from A
+    RETURN failure
+\end{Verbatim}
+
+
+\subsubsection{4-queens problem}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP1.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP2.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP4.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP5.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP6.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP7.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP8.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP9.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP10.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP11.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/11/4QP12.png}
+    \end{center}
+\end{multicols}
+Is AC-3 enough? No, it is not. AC-3 does not detect all the inconsistencies among binary constraints. Consider the following example:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/11/TriangleGraph.png}
+\end{center}
+Generalizing constraint propagation (k-consistency) increases the computational complexity. Trade-off between time spent in search and time spent in constraint propagation.AC-3 is usually a good compromise.
+Other improvements:
+\begin{itemize}
+    \item Backjumping
+    \item Exploit the structure of the problem
+    \item Independent subproblems
+    \item Efficient solutions when the constraint graph is a tree. Tree decomposition:
+    \begin{center}
+        \includegraphics[scale=0.3]{../images/11/TreeDecomposition.png}
+    \end{center}
+\end{itemize}
+
+\begin{Verbatim}[frame=single, numbers=left,fontsize=\small, commandchars=\\\(\)]
+    IF assignment A is complete, THEN RETURN A
+    (\color(blue)run AC-3 and reduce var-domains of unassigned variables)
+    IF a variable has an empty dosmain THEN RETURN failure
+    X ← choose a variable not in A
+    D ← choose an order of values in the domain of X
+    FOR EACH v in D DO
+    add (X ← v) to A
+    (\color(blue)var-domains ← FORWARD-CHECKING(var-domains, X, v, A))
+    IF no variable has an empty domain THEN
+    result ← CSP-BACKTRACKING(A, var-domains)
+    IF result != failure, THEN RETURN result
+    remove (X ← v) from A
+    RETURN failure
+\end{Verbatim}
+Some CSPs can be solved only using \textcolor{blue}{inference}, without any search. For example the game of Sudoku.
+
+\subsection{Local search}
+Starting from a complete assignment and trying to improve it with "local moves" using optimization techniques.
+\begin{center}
+    \includegraphics[scale=0.4]{../images/11/LocalSearch.png}
+\end{center}
+Where h represents the number of attacks between queens. The goal is to minimize h.\\
+
+Optimization is the problem of choosing the best option from a set of options. Search algorithms solve optimization problems by
+maintaining a set of different paths (options) that they
+are simultaneously exploring. Local search algorithms maintain a single state (option) and search by moving to a neighboring state
+They are useful when we don’t care about the path, but
+are simply looking for the solution (not for the path to
+reach it).
+
+\textbf{In local search we want to know how
+the solution looks like not how to reach it.}\\
+
+\textbf{Example}: homes and hospital\\
+\begin{center}
+    \includegraphics[scale=0.2]{../images/11/HH.png}
+\end{center}
+We want to find a way to place two hospitals on this map that minimizes the sum of the distances between
+the houses and the closest hospitals. We compute the cost using the Manhattan distance.
+\begin{center}
+    \includegraphics[scale=0.2]{../images/11/HH2.png}
+\end{center}
+Cost of the configuration (state) is 4+4+3+6=17 because if we place the hospitals in these positions, the cost using the Manhattan distance is 17.
+
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/GlobalMaximum.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/GlobalMinimum.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/CurrentStatesNeighbors.png}
+    \end{center}
+\end{multicols}
+Neighbors are states that are close to the current state but slightly different and thus might have a slightly different value. In the case of the hospitals, a neighbor solution might move one or more hospitals to one position. Thus, we keep the current state and slightly move from it by exploring its neighboring states.
+
+\subsubsection{Hill climbing}
+In hill climbing, if I am trying to find the global maximum, I will move to the neighbor with the highest value. Iteratively, I will evaluate the new neighbors and select that with the highest value. Until all the neighbors represent worse options than the current state. In this case, the current state is output as the maximum found by hill climbing.
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HC1.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HC2.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HC3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HC4.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HC5.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HC6.png}
+    \end{center}
+\end{multicols}
+The actual algorithm of Hill-climbing is:
+\begin{center}
+    \includegraphics[scale=0.15]{../images/11/HCAlgorithm.png}
+\end{center}
+
+
+Now we apply hill climbing to the hospital problem:
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HCHH1.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HCHH2.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HCHH3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HCHH4.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HCHH5.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.15]{../images/11/HCHH6.png}
+    \end{center}
+\end{multicols}
+
+Hill climbing might converge to a maximum that is not
+the global maximum\dots Hill climbing variants and other optimization methods
+\begin{itemize}
+    \item Steepest-ascent: Choose the highest-valued neighbor
+    \item Stochastic: Choose randomly from higher-valued neighbors
+    \item First-choice: Choose the first higher-valued neighbor
+    \item Random-Restar: Conduct hill climbing multiple times
+    \item Local-beam search: Choose the \emph{k} highest valued neighbors
+\end{itemize}
+Other optimization approaches include: Simulated annealing, Tabu search, Genetic algorithms, Linear programming. \\
+
+\textbf{CSPs could be viewed as optimization problems with:
+objective function = number of violated constraints}.
+Optimal solution has objective function = 0, meaning that no constraint is violated (consistency). How do you ensure that the solution of the optimization problem is also complete (all variables
+are assigned a value)? \textbf{Using local search, CSPs could be viewed as optimization
+problems with a complete-state formulation:
+the state of the optimization problem has all the
+components of a CSP solution, but not in the right place}.
