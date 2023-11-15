@@ -1,0 +1,238 @@
+Let's start with a recap of what we have seen so far from a problem standpoint:
+\begin{center}
+    \includegraphics[scale=0.2]{../images/12/Recap.png}
+\end{center}
+A state can be represented with different types of “structure”:
+\begin{itemize}
+    \item \textbf{Atomic states}, denoted by an id with native operations = and $\neq$
+    \item \textbf{Factored states}, denoted by a set of pairs (variable, value) with native operations add a pair, remove a pair, \dots
+\end{itemize}
+Now we will see \textbf{structured states}, denoted by a set of objects, a set of relations between the objects, \dots with native operations inference, reasoning\dots
+
+\section{Logical agents}
+What if states represent the objects that exist (and,
+possibly, their relations) and the statements that hold in
+the world?\\
+
+A \textbf{logical agent} is an agent that is capable of using logical sentences to represent knowledge of states and actions, and to exploit such representation to decide what to do. By \textbf{logical sentence} we mean a sentence (i.e., a well-formed formula) of the formal language of a logical system, like \textbf{Propositional Logic (PL), First Order Logic (FOL)}, systems of Modal Logic, etc. In what follows, we deal only with PL and FOL.\\
+
+A \textbf{knowledge base (KB)} is a set of logical sentences.Declarative approach to building agents. Two basic operations on the KB:
+\begin{itemize}
+    \item \textbf{Tell}: insert into the KB new knowledge in form of sentences
+    \item \textbf{Ask}: query the KB about some fact (implies reasoning!)
+\end{itemize}
+
+\textbf{Example}\\
+Example of a knowledge base in Prolog (a logic programming language). If, using Tell, you add:
+\begin{Verbatim}[numbers = left, frame=single]
+- male(yasin)
+- female(ruba)
+- male(yusuf)
+- mortal(X) :- person(X)
+- person(X) :- female(X)
+- person(X) :- male(X)
+\end{Verbatim}
+Then, using Ask, you get these answers:
+\begin{Verbatim}[numbers = left, frame=single]
+prolog queries:
+- ?- mortal(ziggy).
+\end{Verbatim}
+Ideally, a logical agent could determine the next action to perform through reasoning
+\begin{center}
+    \includegraphics[scale=0.2]{../images/12/NextAction.png}
+\end{center}
+In practice, agents combine search and reasoning techniques. \\
+
+Agents are described according to what they know, not according to how they are implemented (reuse of knowledge). Economy in representation: only a core of essential information is explicitly represented, other
+information can be derived. A logical agent can answer any answerable question given the available knowledge (as opposite to previous search-based agents that can answer only “how to get from A to B” questions).
+
+\textbf{Example1 }: car failure diagnosis\\
+\begin{center}
+    \includegraphics[scale=0.2]{../images/12/CarFailureDiagnosis.png}
+\end{center}
+Representing statements:
+\begin{multicols}{2}
+    \begin{itemize}
+        \item A = "the engine is getting gas"
+        \item B = "the engine will turn over"
+        \item C = "the problem is spark plugs"
+        \item D = "the lights do not come on"
+        \item E = "the problem is battery or cables"
+        \item F = "the problem is the starter motor"
+    \end{itemize}
+    This is propositional logic:
+    \begin{itemize}
+        \item Rule 1: $A \wedge B \to C$
+        \item Rule 2: $\lnot B \wedge D \to E$
+        \item Rule 3: $\lnot  B \wedge \not D \to F$
+    \end{itemize}
+\end{multicols}
+
+\textbf{Example2 }: parenthood\\
+If x is a parent of y, then x is older than y. If x is the mother of y, then x is a parent of y. Lulu is the mother of Fifi.\\
+
+Representing objects and statements:
+\begin{multicols}{2}
+    \begin{itemize}
+        \item x,y = generic entities
+        \item P(x,y) = "x is a parent of y"
+        \item O(x,y) = "x is older than y"
+        \item M(x,y) = "x is mother of y"
+    \end{itemize}
+    This is first-order logic:
+    \begin{itemize}
+        \item Sentence 1: $A\forall x \forall y P(x,y) \to O(x,y)$
+        \item Sentence 2: $\forall x \forall y M(x,y) \to P(x,y)$
+        \item Sentence 3: $M(Lulu,Fifi)$
+    \end{itemize}
+\end{multicols}
+
+\textbf{Statements} can be true or false (no third option) in a given situation and can be composed into complex sentences. Statements can be \textbf{rules} ($\forall x \forall y M(x,y) \to P(x,y)$) or \textbf{facts} ($M(Lulu, Fifi)$). \textbf{Objects} denote entities that populate a given situation. 
+
+From the sentences of the example 2 we can infer that Lulu is older than Fifi. \\
+
+Is symbolic reasoning important? "You can think about deep learning as it currently is today as the equivalent in the brain to our sensory cortices: our visual cortex or auditory cortex. But, of course, true intelligence is a lot more than just that, you have to recombine it into higher-level thinking and symbolic reasoning, a lot of the things classical AI tried to deal with in the 80s."
+
+\subsection{Logic in general}
+\textbf{Logics} are formal languages for representing information such that conclusions can be drawn. \textbf{Syntax} defines the sentences in the language. \textbf{Semantics} define the “meaning” of sentences (namely, define truth of a sentence in a world).
+For example, for the language of arithmetic:
+\begin{itemize}
+    \item syntax: $x+2 > y$ is a sentence, while $x2y > + $is not
+    \item semantics: $x +2 > y $ is true in world where $x =3$ and $y = 1$ and it is false in a world in which $x = 1$ and $y = 4$
+\end{itemize}
+So syntax tells what sentences are allowed while semantics tells what are the possible worlds and which sentences are true in which world. 
+\begin{center}
+    \includegraphics[scale=0.2]{../images/12/LogicInGeneral.png}
+\end{center}
+
+\subsection{Propositional Logic (PL)}
+Propositional logic is the simplest logic: it represents only statements (true/false), also called sentences. 
+\subsubsection{PL syntax}
+The propositional symbols $P, Q$, \dots are sentences
+\begin{itemize}
+    \item If $\alpha$ is a sentence, $\lnot \alpha$ is a sentence (negation)
+    \item If $\alpha$ and $\beta$ are sentences, $\alpha \wedge \beta$ is a sentence (conjunction)
+    \item If $\alpha$ and $\beta$ are sentences, $\alpha \lor \beta$  is a sentence (disjunction)
+    \item If $\alpha$ and $\beta$ are sentences, $\alpha \implies \beta$ is a sentence (implication)
+    \item If $\alpha$ and $\beta$ are sentences, $\alpha \iff \beta$ is a sentence (biconditional)
+\end{itemize}
+
+\subsubsection{PL semantics}
+Each model specifies true/false for each propositional symbol. For example, $P$ = false, $Q$ = true, $R$ = false. With $n$ propositional symbols there are $2^n$ models, which can be enumerated. Given a model $M$, the following rules (\textbf{truth tables}) are applied to evaluate the truth of sentences with respect to $M$:
+\begin{center}
+    \includegraphics[scale=0.2]{../images/12/PropositionalLogic.png}
+\end{center}
+Truth of arbitrary sentences is evaluated recursively.\\
+
+PL sentences are represented as trees using Expr:
+\begin{Verbatim}[frame=single, numbers=left]
+sentence = expr('~(P & Q) ==> (~P | ~Q)’)
+sentence.op
+out: ==>
+sentence.args
+out: (~(P & Q), (~P | ~Q))
+\end{Verbatim}
+
+Pros and cons of propositional logic. Pros:\\
+\begin{itemize}
+    \item Propositional logic allows partial/disjunctive/negated information (unlike most data structures and databases)
+    \item Propositional logic is compositional: the meaning of $P \land Q$ is derived from the meaning of $P$ and $Q$
+    \item Meaning in propositional logic is context-independent (unlike natural language, where meaning depends on context)
+\end{itemize}
+Cons
+\begin{itemize}
+    \item Propositional logic has very limited expressive power (unlike natural language)
+    \item For example, expressing the property that each square in a grid world has 8 neighbors requires writing a sentence for each square
+\end{itemize}
+
+\subsection{First Order Logic (FOL)}
+Whereas propositional logic assumes the world contains statements, first-order logic (like natural language) assumes the world contains:
+\begin{itemize}
+    \item objects, denoted directly (people, houses, numbers, colors, baseball games, wars, \dots) or indirectly through functions (father of, best friend, one more than, plus, \dots)
+    \item statements in form of relations (predicates) between objects (red, round, prime, brother of, bigger than, part of, comes between, \dots)
+\end{itemize} 
+
+\subsubsection{FOL syntax}
+Syntax of basic elements:
+\begin{itemize}
+    \item Constant symbols KingJohn, 2, POLIMI, \dots
+\item Predicate symbols Brother, $>$,\dots
+\item Function symbols Sqrt, LeftLegOf,\dots
+\item Variables $x,y,a,b,\dots$
+\item Connectives $\lnot, \implies, \lor, \land, \iff$
+\item Equality =
+\item Quantifiers $\forall, \exists$
+\end{itemize}
+
+
+Syntax of atomic sentences:\\
+Atomic sentence: $\text{predicate}(\text{term}_1, \dots, \text{term}_n)$ or $\text{term}_1 = \text{term}_2$.\\
+Term:  $\text{function}(\text{term}_1, \dots, \text{term}_n)$ or costant or variable. A term denotes an object. \\
+Examples: Brother(KingJohn,RichardTheLionheart), 
+Longer(Length(LeftLegOf(Richard)), Length(LeftLegOf(KingJohn))).\\
+
+Complex sentences are made from atomic sentences using connectives. \\
+Examples: $\lnot \alpha$, $\alpha \land \beta$, Brother(KingJohn,Richard) $\implies$ Brother(Richard,KingJohn).
+
+\subsubsection{FOL semantics}
+Sentences are true with respect to a model. The model contains objects (domain elements) and relations among them and it specifies referents (interpretation) for:
+\begin{itemize}
+    \item constant symbols $\rightarrow$ objects
+    \item predicate symbols $\rightarrow$ relations
+    \item function symbols $\rightarrow$ functions
+\end{itemize}
+An atomic sentence $\text{predicate}(\text{term}_1, \dots, \text{term}_n)$ is true when the objects referred to by $\text{term}_1, \dots, \text{term}_n$ are in the relation referred to by predicate. A complex sentence is true with the usual rules for connectives
+
+\begin{center}
+    \includegraphics[scale=0.2]{../images/12/ModelFirstOrderLogic.png}
+\end{center}
+Is the sentence
+Brother(KingJohn,Richard) $\implies$ Brother(Richard,KingJohn) true in this model?\\
+
+\subsection{Universal quantification}
+It has the form: $\forall <variable><sentence>$. Everyone at POLIMI is smart: $\forall x \text{ at } (x, POLIMI) \implies Smart(x)$. $\forall x P $ is true in a model $M$ iff $P$ is true with $x$ being each possible object in the model. Roughly speaking, universal quantification to the conjunction of instantiation of $P$.
+
+Typically $\implies$ is the main connective with $\forall$. \textbf{Common mistake}: using $\land$ as the main connective with $\forall$: what does it mean $\forall x \text{ at } (x, POLIMI) \land Smart(x)$?“Everyone is at POLIMI and everyone is smart”.
+
+
+\subsection{Existential quantification}
+It has the form: $\exists <variable><sentence>$. Someone at POLIMI is smart: $\exists x \text{ at } (x, POLIMI) \land Smart(x)$. $\exists x P $ is true in a model $M$ iff $P$ is true with $x$ being some possible object in the model. Roughly speaking, universal quantification to the disjunction of instantiation of $P$.
+
+Typically $\land$ is the main connective with $\exists$. \textbf{Common mistake}: using $\implies$ as the main connective with $\exists$: what's wrong in $\exists x \text{ at } (x, POLIMI) \implies Smart(x)$?“It is true if there is anyone who is not at POLIMI!”.
+
+\subsection{Properties of quantifiers}
+$\forall x \forall y$ is the same as $\forall y \forall x$ and this is true also for $\exists$. But $\exists x \forall y$ is not the same as $\exists y \forall x$. 
+
+Example: $\exists x \forall y \text{ Loves} (x,y)$ and $\forall y\exists x \text{ Loves} (x,y)$ mean “There is a person who loves everyone in the world” and “Everyone in the world is loved by at least one person”.
+Quantifier duality: each can be expressed using the other
+\[
+    \forall x \text{ Likes}(x, IceCream) \equiv \lnot \exists x \lnot \text{ Likes}(x, IceCream)       
+\]
+
+$\text{term}_1 = \text{term}_2$ is true under a given interpretation if and only if $\text{term}_1$ and $\text{term}_2$ refer to the same object. For example, definition of Sibling in terms of Parent:
+\[
+    \forall x,y \hspace{0.1cm} Sibling(x,y) \iff \left[\lnot (x=y) \land \exists m,f \lnot(m=f) \land  Parent(m,x)  \land  Parent(f,x)  \land  Parent(m,x) \land Parent(f,y) \right]    
+\]
+FOL sentences are represented as trees using Expr (implicit universal quantification)
+\[
+\text{expr("(American(x) \& Weapon(y) \& Sells(x, y, z) \& Hostile(z)) ==$>$ Criminal(x)")}
+\]
+
+\textbf{Entailment:} $\alpha \vDash \beta$ ("$\alpha$ entails $\beta$" or "$\beta$ follows $\alpha$") iff in every world where $\alpha$ is true, $\beta$ is also true. This means that the $\alpha$-worlds are a subset of the $\beta$-worlds $[\text{models}(\alpha) \subseteq \text{models}(\beta)]$. Generalized to $KB \vDash \beta$, meaning $[\text{models}(KB) \subseteq \text{models}(\beta)]$. In the example, $\alpha_1 \vDash \alpha_2$ (for instance, $\alpha_1$ is $\lnot Q \land R \land S \land W$ and $\alpha_2$ is $\lnot Q$).\\
+
+How to determine entailment $\alpha \vDash \beta$? 
+\begin{itemize}
+    \item Method 1: \textbf{model-checking}: for every possible world, if $\alpha$ is true check whether $\beta$ is true too. Works for propositional logic (finitely many clocks), not easy for first-order logic
+    \item Method 2: \textbf{theorem-proving}: search for a sequence of proof steps (applications of inference rules) leading from $\alpha$ to $\beta$. For instance, from $P \land (P \implies Q)$, infer $Q$ by modus ponens
+\end{itemize}
+A proof of demonstration (derivation) of $\beta$ starting from $\alpha$ and using an algorithm $A$ (mechanical procedure), we write $\alpha \vdash_A \beta$. \textbf{Sound} algorithm $A$: everything it claims to prove is in fact entailed $\alpha \vdash_A \beta \implies \alpha \vDash \beta$. \textbf{Complete} algorithm $A$: everything that is entailed can be proved: $ \alpha \vDash \beta \implies\alpha \vdash_A \beta$.\\
+
+A sentence is \textbf{valid} if it is true in all models (worlds): $true, A \lor \lnot A, A \implies A, (A \land (A \implies B)) \implies B, \dots$
+
+Validity is connected to entailed via the \textbf{deduction theorem:} $KB \vDash \alpha$ if and only if $KB \implies \alpha$ is valid. \\
+
+A sentence is \textbf{satisfiable} if it is true in some model: $A \lor B, C, \dots$\\
+
+A sentence is unsatisfiable if it is true in no models: $A \land \lnot A$\\
+
+Satisfiability is connected to entailment via the following (\textbf{refiutation} or \textbf{contradiction}): $KB \vDash \alpha$ if and only if $KB \and \lnot \alpha$ is unsatisfiable.
