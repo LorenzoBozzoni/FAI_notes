@@ -62,3 +62,137 @@ Conversion to CNF, consider $A \leftrightarrow (B \lor C)$:
     \item Move $\neg$ inwards using deMorgan's rule $(\neg(\alpha \land \beta))$ is equivalent to $(\neg \alpha \lor \neg \beta)$ and $(\neg(\alpha \lor \beta))$ is equivalent to $(\neg \alpha \land \neg \beta)$: $(\neg A \lor B \lor C) \land ((\neg B \land \neg C) \lor A)$
     \item Apply distributivity law and flatten: $(\neg A \lor B \lor C) \land (\neg B \lor A) \land (\neg C \lor A)$
 \end{enumerate}
+Essentially a backtracking (depth-first) search over models with some extras:
+\begin{itemize}
+    \item Early termination: stop when
+    \begin{itemize}
+        \item all clauses are satisfied $(A \lor B)\land (A \lor \neg C)$ is satisfied by $\{A = 1\}$
+        \item any clause is falsified: $(A \lor B)\land (A \lor \neg C)$ is falsified by $\{A = 0, B = 0\}$
+    \end{itemize}
+    \item Pure literals heuristic: if all occurrences of a symbol in yet-unsatified clauses have the same sign, then give the symbol that value:
+    \begin{itemize}
+        \item in $(A \lor B)\land (A \lor \neg C) \land (C \lor \neg B)$. $A$ is pure and positive, so set it to true
+        \item if there is a model, then there is a model also with $\{\dots, A = 1, \dots\}$
+    \end{itemize}
+    \item Unit clause heuristic: if a clause has a single literal, set the corresponding symbol to satisfy clause:
+    \begin{itemize}
+        \item in $(A \lor B) \land \neg C$. $\neg C$ must be set to true $\{C = 0\}$
+    \end{itemize}
+\end{itemize}
+Pure literals and unit clauses often propagate to new pure literals and unit clauses: $(\neg A \lor B \lor C)\land (A \lor \neg C)$ with pure literal $\{B=1\}$ becomes $(A \lor \neg C)$, then $A$ is pure literal \dots
+
+The actual DPLL algorithm:
+\begin{Verbatim}[numbers=left, frame=single]
+function DPLL(clauses, symbols, model) returns true or false
+if every clause in clauses is true in model then return true
+if some clause in clauses is false in model then return false
+P, value <- FIND-PURE-SYMBOL(symbols, clauses, model)
+if P is non-null then return DPLL(clauses, symbols - P, model U {P=value})
+P, value ←FIND-UNIT-CLAUSE(clauses, model)
+if P is non-null then return DPLL(clauses, symbols - P, model U {P=value})
+P ← First(symbols); rest ← Rest(symbols)
+return or(DPLL(clauses, rest, model U {P=true}),
+DPLL(clauses, rest, model U {P=false}))
+\end{Verbatim}
+Its python implementation:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/DPLL.png}
+\end{center}
+Example of DPLL: check if the set of sentences $\alpha = \{A \rightarrow B \lor C, \neg C, A \land B \rightarrow D, C \rightarrow \neg D\}$ is satisfiable. Convert in CNF:
+\begin{itemize}
+    \item $A \rightarrow B \lor C$ becomes $\neg A \lor B \lor C$
+    \item $\neg C$ remains $\neg C$
+    \item $A \land B \rightarrow D$ becomes $\neg A \lor \neg B \lor D$
+    \item $C \rightarrow \neg D$ becomes $\neg C \lor \neg D$
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/ExampleDPLL2.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/ExampleDPLL3.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/ExampleDPLL3.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/ExampleDPLL4.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/ExampleDPLL5.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/ExampleDPLL6.png}
+\end{center}
+Conclusion: the set of sentences $\alpha$ is satisfiable (because it is satisfied by any complete assignment extending $\{\neg C = 1, \neg A = 1\}$).\\
+
+Another example of DPLL: is the set of sentences $\alpha = \{A \lor B, A \lor \neg B, \neg A \lor B\}$ satisfiable? 
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/AnotherExampleDPLL.png}
+\end{center}
+At least one branch (with $A$ true) is satisfiable: the set of sentences $\alpha$ is satisfiable
+If the branch with $A$ true was unsatiasfiable, backtrack and try with the branch with A false
+Split on several variables, in general
+What if we would like to prove unsatisfiability?
+All branches must be unsatisfiable.
+
+The problem of establishing propositional entailment can be reduced to a SAT problem, because $\alpha \vDash \beta$ holds
+\begin{itemize}
+    \item if, and only if, every models that satisfies $\alpha$ also satisfies $\beta$
+    \item equivalently if, and only if, no model satisfies both $\alpha$ and $\neg \beta$
+    \item equivalently if, and only if, $\alpha \lor \neg \beta$ is unsatisfiable (by refutation or contradiction)
+\end{itemize}
+Consider again the previous example in which we want to prove $\{a,b\} \vDash c$. 
+\begin{itemize}
+    \item $R \land W \rightarrow RCA$
+    \item $R \land \neg RCA$
+    \item $\neg W$
+\end{itemize}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.21]{../images/13/SAT1.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.21]{../images/13/SAT2.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.21]{../images/13/SAT3.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.21]{../images/13/SAT4.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.21]{../images/13/SAT5.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.21]{../images/13/SAT6.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.21]{../images/13/SAT7.png}
+    \end{center}
+\end{multicols}
+Conclusion: the set $\{a,b,\neg c\}$ is unsatiasfiable, therefore $\{a,b\} \vDash c$ holds.\\
+
+\subsubsection{Efficiency}
+Naive implementation of DPLL: solve ~100 variables. Improvements:
+\begin{enumerate}
+    \item Variable and value ordering (from CSPs)
+    \item Divide and conquer
+    \item Caching unsolvable subcases as extra clauses to avoid redoing them 
+    \item Cool indexing and incremental recomputation tricks so that every step of the DPLL algorithm is efficient (typically $O(1)$)
+    \begin{itemize}
+        \item Index of clauses in which each variable appears $+ve/-ve$
+        \item Keep track of number of satisfied clauses, update when variables are assigned
+        \item Keep track of number of ramaining literals in each clause
+    \end{itemize}
+    \item Real implementation of DPLL: solve ~10000000 variables
+\end{enumerate}
+SAT solvers in practice:
+\begin{itemize}
+    \item Circuit verification: does this VLSI circuit compute the right answer?
+    \item Software verification: does this program compute the right answer?
+    \item Software synthesis: what program computes the right answer?
+    \item Protocol verification: can this security protocol be broken?
+    \item Protocol synthesis: what protocol is secure for this task?
+    \item Planning next classes
+\end{itemize}
+On the slides there are some examples and exercises.\\  
