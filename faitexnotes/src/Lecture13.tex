@@ -1,0 +1,64 @@
+\subsection{Model checking}
+Two algorithms:
+\begin{enumerate}
+    \item Reasoning with truth tables
+    \item Exploting satisfiability (DPLL)
+\end{enumerate}
+
+\subsubsection{Reasoning with truth tables}
+Reasoning with truth tables is a form of semantic reasoning, in the sense that it directly exploits the definition of entailment: $\alpha \vDash \beta $ holds when $\beta$ is true in every model that makes $\alpha$ true
+In PL, a model is an assignment of truth values (1 or 0, true or false, $T$ or $\perp $) to every
+propositional symbol that appears in $\alpha$ or $\beta$ (or both)
+Therefore, with $n$ symbols we have 2$n$ different models, which correspond to the rows of the truth table. For every model (row), we compute the truth values of $\alpha$ and $\beta$ (by recursively computing the truth values of all the subsentences of $\alpha$ and $\beta$). Then we have that $\alpha \vDash \beta$ if, and only if, every model (row) that assigns 1 to $\alpha$ also assigns 1 to $\beta$.\\
+
+Example: \\
+Let us consider:
+\begin{itemize}
+    \item When it rains and it is windy Alice, wears a raincoat
+    \item It rains, but Alice does not wear a raincoat
+    \item Therefore, it is not windy
+\end{itemize}
+Propositional representation:
+\begin{itemize}
+    \item $R \wedge W \rightarrow RCA$
+    \item $R \wedge \neg RCA$
+    \item $\neg W$
+\end{itemize}
+We want to prove ${a,b} \vDash c$.
+Here is the truth table:
+\begin{center}
+    \includegraphics[scale=0.3]{../images/13/TruthTable.png}
+\end{center}
+This reasoning procedure is sound and complete. It always terminates, making reasoning in PL decidable. However, it is inefficient when many propositional symbols are involved, because it has to compute a table of size $2^n\times M$, where $n$ is the number of propositional symbols and $M$ is the number of subsentences that appear in the premises and the conclusion. Another drawback of reasoning with truth tables is that it is very unnatural, in the sense that the reasoning process is very far from the most usual forms of human reasoning. This may be problematic in those applications in which an artificial agent must be able to justify the conclusions of its reasoning processes in a way that is easily understandable for a human being.
+
+Certain applications of PL require an agent to establish whether a set of sentences $\alpha$ is or is not satisfiable (i.e., whether there is an assignment of truth values to the symbols of $\alpha$ that makes $\alpha$
+true).
+
+Note: in general, set $\alpha$ may be finite or infinite; if it is finite, i.e., $\alpha = {\alpha_1, \alpha_2, \dots, \alpha_n}$, then $\alpha$ set is
+logically equivalent to the conjunction of its elements, $\alpha_1 \wedge \alpha_2 \wedge \dots \wedge \alpha_n$. In standard AI applications, $\alpha$ is always finite (although it may be very large): therefore, when it is
+convenient we can regard $\alpha$ as a single sentence with no loss of generality. The problem of establishing the satisfiability of a set of propositional sentences is known as SAT. Many interesting problems, including establishing propositional entailment, can be reduced to SAT. A (rather inefficient) solution of SAT is given by truth tables: $\alpha$ is satisfiable if, and only if, it has truth value 1 in at least one row of its truth table. A more efficient method is provided by the DPLL algorithm.
+
+
+\subsubsection{DPLL}
+From Davis-Putnam-Logemann-Loveland. Establish whether a set of sentences $\alpha$ is or is not satisfiable. Preprocessing: convert every sentence in \textbf{CNF (Conjunctive Normal Form)}. Body of the procedure: from an empty assignment, incrementally try to build a model of $\alpha$ (i.e., an assignment of truth values to the propositional symbols)
+\begin{itemize}
+    \item if a model is built, $\alpha$ is satisfiable
+    \item if the algorithm terminates without being able to build a model, $\alpha$ is unsatisfiable
+\end{itemize}
+
+\textbf{CNF (Conjunctive Normal Form)} represents a sentence as a conjunction of clauses, where a clause is a disjunction of literals and a literal is either a propositional symbol or the negation of a symbol. Every sentence of PL can be transformed in an equivalent sentence in CNF:
+\begin{itemize}
+    \item $A \rightarrow B \lor C$ becomes $\neg A \lor B \lor C$
+    \item $C \rightarrow \neg D$ becomes $\neg C \lor \neg D$
+\end{itemize}
+A CNF sentence is often considered as a set of clauses (in logical conjunction), which are in turn considered as sets of literals (in logical disjunction): $(\neg A \lor B \lor C) \land (\neg C \lor \neg D)$ becomes $\{ \{ \neg A, B, C \}, \{ \neg C, \neg D \} \}$. 
+
+\textbf{Unit clause}: clause with only one literal; e.g. $\neg C$. Two literals are \textbf{complementary} if they refer to the same propositional symbol but have different "signs", like $\neg C$ and $C$.
+
+Conversion to CNF, consider $A \leftrightarrow (B \lor C)$:
+\begin{enumerate}
+    \item Eliminate $\leftrightarrow$, replacing $\alpha \leftrightarrow \beta$ with $(\alpha \rightarrow \beta) \lor (\beta \rightarrow \alpha)$: $(A \rightarrow (B \lor C)) \land ((B \lor C) \rightarrow A)$
+    \item Eliminate $\rightarrow$, replacing $\alpha \rightarrow \beta$ with $\neg \alpha \lor \beta$: $(\neg A \lor B \lor C) \land (\neg (B \lor C) \lor A)$
+    \item Move $\neg$ inwards using deMorgan's rule $(\neg(\alpha \land \beta))$ is equivalent to $(\neg \alpha \lor \neg \beta)$ and $(\neg(\alpha \lor \beta))$ is equivalent to $(\neg \alpha \land \neg \beta)$: $(\neg A \lor B \lor C) \land ((\neg B \land \neg C) \lor A)$
+    \item Apply distributivity law and flatten: $(\neg A \lor B \lor C) \land (\neg B \lor A) \land (\neg C \lor A)$
+\end{enumerate}

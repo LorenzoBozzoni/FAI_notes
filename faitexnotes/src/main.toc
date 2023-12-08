@@ -1,11 +1,3 @@
-\contentsline {section}{\numberline {1}Logical agents}{2}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Logic in general}{4}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Propositional Logic (PL)}{4}{subsection.1.2}%
-\contentsline {subsubsection}{\numberline {1.2.1}PL syntax}{4}{subsubsection.1.2.1}%
-\contentsline {subsubsection}{\numberline {1.2.2}PL semantics}{4}{subsubsection.1.2.2}%
-\contentsline {subsection}{\numberline {1.3}First Order Logic (FOL)}{5}{subsection.1.3}%
-\contentsline {subsubsection}{\numberline {1.3.1}FOL syntax}{5}{subsubsection.1.3.1}%
-\contentsline {subsubsection}{\numberline {1.3.2}FOL semantics}{5}{subsubsection.1.3.2}%
-\contentsline {subsection}{\numberline {1.4}Universal quantification}{6}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Existential quantification}{6}{subsection.1.5}%
-\contentsline {subsection}{\numberline {1.6}Properties of quantifiers}{6}{subsection.1.6}%
+\contentsline {subsection}{\numberline {0.1}Model checking}{2}{subsection.0.1}%
+\contentsline {subsubsection}{\numberline {0.1.1}Reasoning with truth tables}{2}{subsubsection.0.1.1}%
+\contentsline {subsubsection}{\numberline {0.1.2}DPLL}{3}{subsubsection.0.1.2}%
