@@ -1,0 +1,191 @@
+\subsection{Theorem proving}
+We are going to consider three algorithms:
+\begin{itemize}
+    \item Resolution
+    \item Forward chaining
+    \item Backward chaining
+\end{itemize}
+
+\subsection{Resolution}
+Propositional resolution is an extremely powerful inference procedure for propositional logic. Propositional resolution works on any set of sentences in clausal form (CNF): set of clauses. It works by refutation : to prove that $KB \vDash \alpha$ it proves that $KB \land \neg \alpha$ is unsatiasfiable, namely it builds a refutation for $KB \land \neg \alpha$ by looking for the empty clause (similar to DPLL). 
+
+Resolution applies (in all the possible ways) the resolution rule to the clauses (original ones + those derived by the previous applications of the resolution rule). Suppose $C_1, C_2$ are two clauses such that literal $l$ in $C_1$ and literal $l^C$ in $C_2$ are complementary (same propositional symbol with different sign), then clauses $C_1$ and $C_2$ can be resolved into a new clause $C$ called \textbf{resolvent}: $C = (C_1 - \{l\})\cup(C_2 - \{l^C\})$.
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/Resolvent.png}
+\end{center}
+The set of clauses: $\dots \{A\},\dots,\{\neg A\},\dots$ is unsatiasfiable because it is stating that $\dots \land A \land \dots \land \neg A \land \dots$. Resolution resolves $A$ and $\neg A$ to the empty clause $\perp$. When the resolution finds the empty clause amounts to say that the original set of clauses is unsatiasfiable.
+
+Example of resolution:\\
+Consider again the example of Alice and the raincoat, in which we want to prove $\{a,b\} \vDash c$.
+\begin{itemize}
+    \item $R \land W \rightarrow RCA$ becomes $\neg R \lor \neg W \lor RCA$
+    \item $R \land \neg RCA$ becomes $R$ and $\neg RCA$ (two clauses) 
+    \item $\neg W$ is negated to $W$
+\end{itemize}
+\begin{multicols}{2}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/14/Resolution2.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/14/Resolution3.png}
+    \end{center}
+
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/14/Resolution4.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[scale=0.2]{../images/14/Resolution5.png}
+    \end{center}
+\end{multicols}
+Conclusion: the set $\{a,b,\neg c\}$ is unsatiasfiable, therefore $\{a,b\} \vDash c$.\\
+
+Using propositional resolution, it is possible to build a theorem prover that is sound and complete for PL
+\begin{itemize}
+    \item Resolution rule is sound
+    \item Theorem: resolvent $C$ is satisfiable if and only if clauses $C_1,C_2$ are simultaneously satisfiable
+    \item Since resolvent is smaller than parent clauses, resolution stops at some point
+\end{itemize}
+Resolution strategies:
+\begin{itemize}
+    \item \textbf{Unit resolution}: at least one of the parent clauses is a unit clause (it contains a single literal). Incomplete in general, but complete for Horn clauses (see later)
+    \item \textbf{Input resolution}: at least one of the two parent clauses is a member of the initial (i.e., input) set of clauses $KB \land \neg \alpha$. Incomplete in general, but complete for Horn clauses (see later). 
+    \item \textbf{Linear resolution}: generalization of input resolution in which at least one of the parents is either in the initial set of clauses or is an ancestor of the other parent. Complete
+    \item \textbf{Set of support resolution}: given a set of support $S$ (which is a subset of the initial clauses such that the clauses not in $S$ are satisfiable), every resolution involves a clause in $S$ (the resolvent is added to $S$)
+\end{itemize}
+Implementation of resolution:
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/ResolutionPython.png}
+\end{center}
+A \textbf{horn clause} is a special PL sentence:
+\begin{itemize}
+    \item (conjunction of symbols) $\rightarrow$ symbol or
+    \item propositional symbol (equivalent to true $\rightarrow$ symbol)
+\end{itemize}
+A KB composed of only Horn clauses is in Horn clauses is in Horn form, for example $C \land (B \rightarrow A) \land (C \land D \rightarrow B)$. \textbf{When converted in CNF, a Horn clause is a clause with at most one positive literal, while a definite clause has exactly one positive literal}: $C \land (B \rightarrow A) \land (C \land D \rightarrow B)$ becomes $C \land (\neg B \lor A) \land (\neg C \lor \neg D \lor B)$.\\
+Horn clauses represent: 
+\begin{itemize}
+    \item rules, $C \land D \rightarrow B$
+    \item facts, $C$ (equivalent to $T \rightarrow C$)
+    \item goals $A \land B \rightarrow \perp$
+    \item empty clause, $T \rightarrow \perp$
+\end{itemize}
+
+\subsection{Forward chaining}
+Forward chaining considers definite clauses and applies \textbf{modus ponens} to generate new facts: given $X_1 \land X_2 \land \dots \land X_n \rightarrow X_1, X_2, \dots, X_n$, infer $Y$. Forward chaining keeps applying this rule, adding new facts, until nothing more can be added. 
+
+Example of forward chaining:\\
+\begin{multicols}{2}
+\[
+    \begin{split}
+        &P \implies Q\\
+        &L \land M \implies P\\
+        &B \land L \implies M\\
+        &A \land P \implies L\\
+        &A \land B \implies L\\
+        &\implies A\\
+        &\implies B\\
+        &\text{Goal: }Q\\
+    \end{split}    
+\]
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/ForwardChaining.png}
+\end{center}
+\end{multicols}
+Forward chaining algorithm:
+\begin{Verbatim}[numbers=left, frame=single]
+function PL-FC-ENTAILS?(KB, q) returns true or false
+    count <- a table, where count[c] is the number of symbols in c’s premise
+    inferred <- a table, where inferred[s] is initially false for all s
+    agenda <- a queue of symbols, initially symbols known to be true in KB
+    while agenda is not empty do
+        p <- Pop(agenda)
+        if p = q then return true
+        if inferred[p] = false then
+            inferred[p]<-true
+            for each clause c in KB where p is in c.premise do
+                decrement count[c]
+                if count[c] = 0 then add c.conclusion to agenda
+    return false
+\end{Verbatim}
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/ForwardChainingProvingQ.png}
+\end{center}
+Actual python implementation of forward chaining:
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/FCPython.png}
+\end{center}
+Forward chaining is sound and complete for KBs composed of definite clauses.
+\begin{itemize}
+    \item Soundness: follows from the soundness of modus ponens 
+    \item Completeness: the algorithm reaches a fixed point from where no new atomic sentences can be derived
+\end{itemize}
+Forward chaining can only derive new positive literals (facts), it cannot derive new rules.
+
+\subsection{Backward chaining}
+Backward chaining works like forward chaining, but backward. Start from the goal (query) $q$, which is a positive literal. To prove $q$, check if $q$ is already in the KB, otherwise prove all the premises of an implication concluding $q$. Avoid loops: check if new subgoal is already on the goal stack. Avoid repeated work: check if new subgoal has already been proved true, or has already failed.
+
+Example of backward chaining:\\
+\begin{multicols}{2}
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/BCExample1.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/BCExample2.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/BCExample3.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/BCExample4.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/BCExample5.png}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.2]{../images/14/BCExample6.png}
+\end{center}
+\end{multicols}
+Implementation of backward chaining: search on an AND-OR graph
+\begin{center}
+    \includegraphics[scale=0.3]{../images/14/BCPython.png}
+\end{center}
+Backward chaining is sound and complete for KBs composed of definite clauses.
+
+Forward chaining is \textbf{data-driven}, automatic, “unconscious” processing, can derive everything that is entailed by the KB, but lots of work is irrelevant to a specific goal. Backward chaining is \textbf{goal-driven}, appropriate for problem-solving, its complexity can be much less than linear in the size of the KB.Formulate the problems solved by inference procedures
+for propositional logic as search problems
+Define initial state, actions and result functions, goal test,
+and step cost. Formulate the satisfiability problem as a constraint
+satisfaction problem (CSP)
+Define variables, domains, and constraints.\\
+
+\textbf{Example of logical agent}: Wumpus world (section 7.2 and 7.7.1 of the textbook).\\
+\begin{multicols}{2}
+The goal of the agent is to find the gold without falling into a pit or being eaten by the wumpus
+The agent can move between cells. 
+
+Cells adjacent to a pit are breezy. Cells adjacent to the wumpus are smelly. 
+
+The agent can just perceive its current cell. 
+\begin{itemize}
+    \item Perceptions: Stench, Breeze, \dots
+    \item Actions: LeftTurn, RightTurn, Forward, \dots
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.3]{../images/14/WumpusWorld.png}
+\end{center}
+\end{multicols}
+Propositional symbols:
+\begin{itemize}
+    \item $P_{i,j}$ means that there is a pit in cell $(i,j)$
+    \item $B_{i,j}$ menas that there is a breeze in cell $(i,j)$
+\end{itemize}
+If the agent starts from cell $(1,1)$ its KB is composed of:
+\begin{itemize}
+    \item initial state: $\neg P_{1,1}$
+    \item what the agent has perceived $\neg B_{1,1}$
+    \item the rules of the world $B_{1,1} \iff (P_{1,2} \lor P_{2,1}), B_{2,1} \iff (P_{1,1} \lor P_{3,1} \lor P_{2,2}), \dots$ 
+\end{itemize}
+Given the KB at the initial step:
+
+
+
