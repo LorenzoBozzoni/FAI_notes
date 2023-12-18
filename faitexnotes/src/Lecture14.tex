@@ -185,7 +185,246 @@ If the agent starts from cell $(1,1)$ its KB is composed of:
     \item what the agent has perceived $\neg B_{1,1}$
     \item the rules of the world $B_{1,1} \iff (P_{1,2} \lor P_{2,1}), B_{2,1} \iff (P_{1,1} \lor P_{3,1} \lor P_{2,2}), \dots$ 
 \end{itemize}
-Given the KB at the initial step:
+Given the KB at the initial step: $\neg P_{1,1}, \neg B_{1,1}, B_{1,1} \iff (P_{1,2} \lor P_{2,1}), \dots$ we could ask if $KB \vDash \neg P_{2,1}$ and if $KB \vDash \neg P_{1,2}$ in order to select the next action the agent should take. \\
+
+\textbf{Solve using DPLL}
+\begin{itemize}
+    \item 1: $\neg P_{1,1}$
+    \item 2: $\neg B_{1,1}$
+    \item 3a: $\neg B_{1,1} \lor P_{1,2} \lor P_{2,1}$
+    \item 3b: $\neg P_{1,2} \lor B_{1,1}$
+    \item 3c: $\neg P_{2,1} \lor B_{1,1}$
+    \item nc: $P_{2,1}$
+\end{itemize}
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $\neg B_{1,1}$
+        \item 3a: $\neg B_{1,1} \lor P_{1,2} \lor P_{2,1}$
+        \item 3b: $\neg P_{1,2} \lor B_{1,1}$
+        \item 3c: $\neg P_{2,1} \lor B_{1,1}$
+        \item nc: $P_{2,1}$
+    \end{itemize}
+    \newcolumn
+Model:
+\begin{itemize}
+    \item $\neg P_{1,1}$ (unit clause)
+\end{itemize}    
+\end{multicols}
 
 
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $T$
+        \item 3a: $T$
+        \item 3b: $\neg P_{1,2}$
+        \item 3c: $\neg P_{2,1}$
+        \item nc: $P_{2,1}$
+    \end{itemize}
+    \newcolumn
+Model:
+\begin{itemize}
+    \item $\neg P_{1,1}$ (unit clause)
+    \item $\neg B_{1,1}$ (unit clause)
+\end{itemize}    
+\end{multicols}
 
+
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $T$
+        \item 3a: $T$
+        \item 3b: $T$
+        \item 3c: $\neg P_{2,1}$
+        \item nc: $P_{2,1}$
+    \end{itemize}
+    \newcolumn
+Model:
+\begin{itemize}
+    \item $\neg P_{1,1}$ (unit clause)
+    \item $\neg B_{1,1}$ (unit clause)
+    \item $\neg P_{1,2}$ (unit clause)
+\end{itemize}    
+\end{multicols}
+
+
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $T$
+        \item 3a: $T$
+        \item 3b: $T$
+        \item 3c: $T$
+        \item nc: $\perp$
+    \end{itemize}
+    \newcolumn
+Model:
+\begin{itemize}
+    \item $\neg P_{1,1}$ (unit clause)
+    \item $\neg B_{1,1}$ (unit clause)
+    \item $\neg P_{1,2}$ (unit clause)
+    \item $\neg P_{2,1}$ (unit clause)
+\end{itemize}    
+Unsatisfiable!
+\end{multicols}
+
+\textbf{How to select the next action}
+Thus, we know that $KB \vDash \neg P_{2,1}$ and moving to cell $(2,1)$ is a safe action. What about $KB \vDash \neg P_{2,1}$?
+Assume that the agent decides to move to cell $(2,1)$. When the agent moves to cell $(2,1)$, tis KB is composed of:
+\begin{itemize}
+    \item initial state: $\neg P_{1,1}$ 
+    \item what the agent has perceived: $\neg B_{1,1}, B_{2,1}$
+    \item the rules of the world: $B_{1,1} \iff (P_{1,2} \lor P_{2,1}), B_{2,1} \iff (P_{1,1} \lor P_{3,1} \lor P_{2,2}), \dots$
+    \item previously derived knowledge: $\neg P_{2,1}, \neg P_{1,2}$
+\end{itemize}
+With PL, we need one sentence relative to the “breeze rule” for each cell. We should add similar rules of the world for stench and presence of wumpus, … (we need more propositional symbols). We do not represent time (!). Implicit assumption: the facts that we asserted are immutable: for example, we do not represent the position of the agent. Adding time requires different propositional symbols for each time step, like $P_{i,j}^t$, meaning that we will have $P_{i,j}^0, P_{i,j}^1,\dots$ Adding time requires also linking the meaning of propositional symbols at different time steps: reification of actions and \textbf{frame problem} (more on this in next classes).\\
+
+Given the KB at the second step: $\neg P_{1,1}, \neg B_{1,1}, B_{2,1}, B_{1,1} \iff (P_{1,2} \lor P_{2,1}),B_{2,1} \iff (P_{1,1} \lor P_{3,1} \lor P_{2,2}), \dots$ we could ask if $KB \vDash \neg P_{2,2}$ and if $KB \vDash \neg P_{1,3}$ in order to select the next action the agent should take (we already know that $KB \vDash \neg P_{1,1}$, so we already know a safe action).\\
+
+Let's solve with DPLL
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $\neg P_{1,1}$
+        \item 2: $\neg B_{1,1}$
+        \item 3: $B_{2,1}$
+        \item 4a: $\neg B_{1,1} \lor P_{1,2} \lor P_{2,1}$
+        \item 4b: $\neg P_{1,2} \lor B_{1,1}$
+        \item 4c: $\neg P_{2,1} \lor B_{1,1}$
+        \item 5a: $\neg B_{2,1} \lor P_{1,1} \lor P_{3,1} \lor P_{2,2}$
+        \item 5b: $\neg P_{1,1} \lor B_{2,1}$
+        \item 5c: $\neg P_{3,1} \lor B_{2,1}$
+        \item 5d: $\neg P_{2,2} \lor B_{2,1}$
+        \item nc: $P_{2,2}$
+    \end{itemize}
+\end{multicols}
+
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $\neg B_{1,1}$
+        \item 3: $B_{2,1}$
+        \item 4a: $\neg B_{1,1} \lor P_{1,2} \lor P_{2,1}$
+        \item 4b: $\neg P_{1,2} \lor B_{1,1}$
+        \item 4c: $\neg P_{2,1} \lor B_{1,1}$
+        \item 5a: $\neg B_{2,1} \lor P_{3,1} \lor P_{2,2}$
+        \item 5b: $T$
+        \item 5c: $\neg P_{3,1} \lor B_{2,1}$
+        \item 5d: $\neg P_{2,2} \lor B_{2,1}$
+        \item nc: $P_{2,2}$
+    \end{itemize}
+    Model:
+    \begin{itemize}
+        \item $\neg P_{1,1}$ (unit clause)
+    \end{itemize}
+\end{multicols}
+
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $T$
+        \item 3: $B_{2,1}$
+        \item 4a: $T$
+        \item 4b: $\neg P_{1,2}$
+        \item 4c: $\neg P_{2,1}$
+        \item 5a: $\neg B_{2,1} \lor P_{3,1} \lor P_{2,2}$
+        \item 5b: $T$
+        \item 5c: $\neg P_{3,1} \lor B_{2,1}$
+        \item 5d: $\neg P_{2,2} \lor B_{2,1}$
+        \item nc: $P_{2,2}$
+    \end{itemize}
+    Model:
+    \begin{itemize}
+        \item $\neg P_{1,1}$ (unit clause)
+        \item $\neg B_{1,1}$ (unit clause)
+    \end{itemize}
+\end{multicols}
+
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $T$
+        \item 3: $T$
+        \item 4a: $T$
+        \item 4b: $\neg P_{1,2}$
+        \item 4c: $\neg P_{2,1}$
+        \item 5a: $P_{3,1} \lor P_{2,2}$
+        \item 5b: $T$
+        \item 5c: $T$
+        \item 5d: $T$
+        \item nc: $P_{2,2}$
+    \end{itemize}
+    Model:
+    \begin{itemize}
+        \item $\neg P_{1,1}$ (unit clause)
+        \item $\neg B_{1,1}$ (unit clause)
+        \item $B_{2,1} $ (unit clause)
+    \end{itemize}
+\end{multicols}
+
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $T$
+        \item 3: $T$
+        \item 4a: $T$
+        \item 4b: $T$
+        \item 4c: $T$
+        \item 5a: $P_{3,1} \lor P_{2,2}$
+        \item 5b: $T$
+        \item 5c: $T$
+        \item 5d: $T$
+        \item nc: $P_{2,2}$
+    \end{itemize}
+    Model:
+    \begin{itemize}
+        \item $\neg P_{1,1}$ (unit clause)
+        \item $\neg B_{1,1}$ (unit clause)
+        \item $B_{2,1} $ (unit clause)
+        \item $\neg P_{1,2}$ (unit clause)
+        \item $\neg P_{2,1}$ (unit clause)
+    \end{itemize}
+\end{multicols}
+
+\hrule
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 1: $T$
+        \item 2: $T$
+        \item 3: $T$
+        \item 4a: $T$
+        \item 4b: $T$
+        \item 4c: $T$
+        \item 5a: $T$
+        \item 5b: $T$
+        \item 5c: $T$
+        \item 5d: $T$
+        \item nc: $T$
+    \end{itemize}
+    Model:
+    \begin{itemize}
+        \item $\neg P_{1,1}$ (unit clause)
+        \item $\neg B_{1,1}$ (unit clause)
+        \item $B_{2,1} $ (unit clause)
+        \item $\neg P_{1,2}$ (unit clause)
+        \item $\neg P_{2,1}$ (unit clause)
+        \item $P_{2,2}$ (unit clause)
+    \end{itemize}
+\end{multicols}
+
+Thus, we know that $KB \not\vDash \neg P_{2,2}$ and moving to cell $(2,2)$ could be an unsafe action. What about $KB \vDash \neg P_{3,1}$?
+The only safe action is coming back to cell $(1,1)$. From there the agent could move to cell $(1,2)$, add $\neg B_{1,2}$ to the KB (which includes the rule $B_{1,2} \iff (P_{1,1} \lor P_{1,3} \lor P_{2,2})$), \dots\\
+
+We have seen a (very simple and rather inefficient) example of a logical agent!
+\begin{center}
+    \includegraphics[scale=0.4]{../images/14/KBAgent.png}
+\end{center}

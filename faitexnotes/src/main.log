@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.11.12)  12 DEC 2023 09:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.11.12)  18 DEC 2023 09:31
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -371,7 +371,7 @@ Package: fancyvrb 2023/11/06 4.5b verbatim text (tvz,hv)
 File: l3backend-pdftex.def 2023-11-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count309
 \l__pdf_internal_box=\box104
-) (./main.aux (./Lecture14.aux))
+) (./main.aux (./Lecture15.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
@@ -466,148 +466,31 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  [1
 
 {/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-\openout2 = `Lecture14.aux'.
+\openout2 = `Lecture15.aux'.
 
- (./Lecture14.tex
-<../images/14/Resolvent.png, id=34, 1549.79pt x 271.0125pt>
-File: ../images/14/Resolvent.png Graphic file (type png)
-<use ../images/14/Resolvent.png>
-Package pdftex.def Info: ../images/14/Resolvent.png  used on input line 14.
-(pdftex.def)             Requested size: 309.95251pt x 54.20152pt.
-<../images/14/Resolution2.png, id=36, 954.56625pt x 403.5075pt>
-File: ../images/14/Resolution2.png Graphic file (type png)
-<use ../images/14/Resolution2.png>
-Package pdftex.def Info: ../images/14/Resolution2.png  used on input line 27.
-(pdftex.def)             Requested size: 190.90987pt x 80.70006pt.
-<../images/14/Resolution3.png, id=37, 954.56625pt x 403.5075pt>
-File: ../images/14/Resolution3.png Graphic file (type png)
-<use ../images/14/Resolution3.png>
-Package pdftex.def Info: ../images/14/Resolution3.png  used on input line 30.
-(pdftex.def)             Requested size: 190.90987pt x 80.70006pt.
-<../images/14/Resolution4.png, id=38, 954.56625pt x 403.5075pt>
-File: ../images/14/Resolution4.png Graphic file (type png)
-<use ../images/14/Resolution4.png>
-Package pdftex.def Info: ../images/14/Resolution4.png  used on input line 34.
-(pdftex.def)             Requested size: 190.90987pt x 80.70006pt.
-<../images/14/Resolution5.png, id=39, 954.56625pt x 403.5075pt>
-File: ../images/14/Resolution5.png Graphic file (type png)
-<use ../images/14/Resolution5.png>
-Package pdftex.def Info: ../images/14/Resolution5.png  used on input line 37.
-(pdftex.def)             Requested size: 190.90987pt x 80.70006pt.
+ (./Lecture15.tex) [2
 
-Underfull \hbox (badness 10000) in paragraph at lines 40--41
-
- []
-
-[2
-
-{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc} <../images/14/Resolvent.png> <../images/14/Resolution2.png> <../images/14/Resolution3.png> <../images/14/Resolution4.png> <../images/14/Resolution5.png>]
-<../images/14/ResolutionPython.png, id=56, 1013.7875pt x 718.685pt>
-File: ../images/14/ResolutionPython.png Graphic file (type png)
-<use ../images/14/ResolutionPython.png>
-Package pdftex.def Info: ../images/14/ResolutionPython.png  used on input line 57.
-(pdftex.def)             Requested size: 202.7539pt x 143.73445pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 76--78
-
- []
-
-<../images/14/ForwardChaining.png, id=57, 363.3575pt x 562.1pt>
-File: ../images/14/ForwardChaining.png Graphic file (type png)
-<use ../images/14/ForwardChaining.png>
-Package pdftex.def Info: ../images/14/ForwardChaining.png  used on input line 91.
-(pdftex.def)             Requested size: 72.6702pt x 112.418pt.
-
-Overfull \vbox (2.43022pt too high) has occurred while \output is active []
-
- [3 <../images/14/ResolutionPython.png> <../images/14/ForwardChaining.png>]
-<../images/14/ForwardChainingProvingQ.png, id=64, 1531.7225pt x 829.0975pt>
-File: ../images/14/ForwardChainingProvingQ.png Graphic file (type png)
-<use ../images/14/ForwardChainingProvingQ.png>
-Package pdftex.def Info: ../images/14/ForwardChainingProvingQ.png  used on input line 111.
-(pdftex.def)             Requested size: 306.33907pt x 165.81656pt.
-<../images/14/FCPython.png, id=65, 1230.5975pt x 662.475pt>
-File: ../images/14/FCPython.png Graphic file (type png)
-<use ../images/14/FCPython.png>
-Package pdftex.def Info: ../images/14/FCPython.png  used on input line 115.
-(pdftex.def)             Requested size: 246.11514pt x 132.49265pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 127--129
-
- []
-
-[4 <../images/14/ForwardChainingProvingQ.png> <../images/14/FCPython.png>]
-<../images/14/BCExample1.png, id=74, 1207.51125pt x 636.3775pt>
-File: ../images/14/BCExample1.png Graphic file (type png)
-<use ../images/14/BCExample1.png>
-Package pdftex.def Info: ../images/14/BCExample1.png  used on input line 130.
-(pdftex.def)             Requested size: 241.49797pt x 127.27324pt.
-<../images/14/BCExample2.png, id=75, 1207.51125pt x 636.3775pt>
-File: ../images/14/BCExample2.png Graphic file (type png)
-<use ../images/14/BCExample2.png>
-Package pdftex.def Info: ../images/14/BCExample2.png  used on input line 133.
-(pdftex.def)             Requested size: 241.49797pt x 127.27324pt.
-<../images/14/BCExample3.png, id=76, 1207.51125pt x 636.3775pt>
-File: ../images/14/BCExample3.png Graphic file (type png)
-<use ../images/14/BCExample3.png>
-Package pdftex.def Info: ../images/14/BCExample3.png  used on input line 136.
-(pdftex.def)             Requested size: 241.49797pt x 127.27324pt.
-<../images/14/BCExample4.png, id=77, 1207.51125pt x 636.3775pt>
-File: ../images/14/BCExample4.png Graphic file (type png)
-<use ../images/14/BCExample4.png>
-Package pdftex.def Info: ../images/14/BCExample4.png  used on input line 139.
-(pdftex.def)             Requested size: 241.49797pt x 127.27324pt.
-<../images/14/BCExample5.png, id=78, 1207.51125pt x 636.3775pt>
-File: ../images/14/BCExample5.png Graphic file (type png)
-<use ../images/14/BCExample5.png>
-Package pdftex.def Info: ../images/14/BCExample5.png  used on input line 142.
-(pdftex.def)             Requested size: 241.49797pt x 127.27324pt.
-<../images/14/BCExample6.png, id=79, 1207.51125pt x 636.3775pt>
-File: ../images/14/BCExample6.png Graphic file (type png)
-<use ../images/14/BCExample6.png>
-Package pdftex.def Info: ../images/14/BCExample6.png  used on input line 145.
-(pdftex.def)             Requested size: 241.49797pt x 127.27324pt.
-<../images/14/BCPython.png, id=80, 1430.34375pt x 718.685pt>
-File: ../images/14/BCPython.png Graphic file (type png)
-<use ../images/14/BCPython.png>
-Package pdftex.def Info: ../images/14/BCPython.png  used on input line 150.
-(pdftex.def)             Requested size: 429.10645pt x 215.60716pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 154--160
-
- []
-
-[5 <../images/14/BCExample1.png> <../images/14/BCExample2.png> <../images/14/BCExample3.png> <../images/14/BCExample4.png> <../images/14/BCExample5.png> <../images/14/BCExample6.png> <../images/14/BCPython.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 161--163
-
- []
-
-<../images/14/WumpusWorld.png, id=92, 469.755pt x 452.69125pt>
-File: ../images/14/WumpusWorld.png Graphic file (type png)
-<use ../images/14/WumpusWorld.png>
-Package pdftex.def Info: ../images/14/WumpusWorld.png  used on input line 174.
-(pdftex.def)             Requested size: 140.92758pt x 135.80841pt.
-) [6 <../images/14/WumpusWorld.png>] (./main.aux (./Lecture14.aux))
+] (./main.aux (./Lecture15.aux))
  ***********
 LaTeX2e <2023-11-01>
 L3 programming layer <2023-11-01>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: D977F1F677760FCB8D35F571DCC7875D;491.
+(rerunfilecheck)             Checksum: AAFE18A8C04FDC9753E6AB809C92DD53;83.
  ) 
 Here is how much of TeX's memory you used:
- 12662 strings out of 474272
- 193504 string characters out of 5747518
- 1937530 words of memory out of 5000000
- 34694 multiletter control sequences out of 15000+600000
- 567037 words of font info for 71 fonts, out of 8000000 for 9000
+ 12504 strings out of 474272
+ 188668 string characters out of 5747518
+ 1926530 words of memory out of 5000000
+ 34548 multiletter control sequences out of 15000+600000
+ 564528 words of font info for 60 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,17n,79p,547b,507s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on main.pdf (6 pages, 1859820 bytes).
+ 75i,6n,79p,314b,439s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
+Output written on main.pdf (2 pages, 53243 bytes).
 PDF statistics:
- 158 PDF objects out of 1000 (max. 8388607)
- 89 compressed objects within 1 object stream
- 12 named destinations out of 1000 (max. 500000)
- 118 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 49 PDF objects out of 1000 (max. 8388607)
+ 34 compressed objects within 1 object stream
+ 5 named destinations out of 1000 (max. 500000)
+ 9 words of extra memory for PDF output out of 10000 (max. 10000000)
 
